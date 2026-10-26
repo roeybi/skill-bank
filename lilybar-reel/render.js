@@ -18,6 +18,8 @@ async function open(browser, file) {
   page.on('pageerror', e => console.error('PAGE ERROR:', e.message));
   page.on('console', m => { if (m.type() === 'error') console.error('CONSOLE:', m.text()); });
   await page.goto('file://' + path.resolve(file));
+  const size = await page.evaluate(() => [window.W || 1920, window.H || 1080]);
+  await page.setViewportSize({ width: size[0], height: size[1] });
   return page;
 }
 async function openScene(browser) {
@@ -35,7 +37,8 @@ function sheet(files, labels, out, cols = 5) {
 import sys, json
 from PIL import Image, ImageDraw, ImageFont
 files, labels, out, cols = json.loads(sys.argv[1]), json.loads(sys.argv[2]), sys.argv[3], int(sys.argv[4])
-tw = 384; th = int(tw * 1080 / 1920)
+w0, h0 = Image.open(files[0]).size
+tw = 384 if w0 >= h0 else 216; th = int(tw * h0 / w0)
 rows = (len(files) + cols - 1) // cols
 S = Image.new('RGB', (cols * (tw + 8) + 8, rows * (th + 26) + 8), (24, 24, 24))
 d = ImageDraw.Draw(S)
@@ -61,7 +64,7 @@ async function stills(times, labels, out) {
     files.push(f);
   }
   await browser.close();
-  sheet(files, labels || times.map(t => t.toFixed(2) + 's'), path.join(out, 'sheet.jpg'));
+  sheet(files, labels || times.map(t => t.toFixed(2) + 's'), path.join(out, 'sheet.jpg'), opt('cols') ? +opt('cols') : 5);
   console.log(`${files.length} stills + sheet.jpg in ${out}`);
 }
 

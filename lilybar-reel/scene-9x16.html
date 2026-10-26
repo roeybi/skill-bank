@@ -1,0 +1,492 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>The Lily Bar showreel 9:16</title>
+<style>
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:100 900;font-display:block;
+  src:url("node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2") format("woff2-variations");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--bg:#F3ECE3;--paper:#FFFCF7;--ink:#2B2320;--muted:#8C8079;--line:rgba(43,35,32,.11);--tile:#EEE5DA;--accent:#A8244B;--cream:#FFF8F1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);overflow:hidden}
+body{font-family:"Fraunces",serif;font-variation-settings:"SOFT" 40,"WONK" 0;color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+#cam{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
+.abs{position:absolute;left:0;top:0}
+.m{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em .04em .3em;margin:-.14em -.04em -.3em}
+.i{display:inline-block}
+.bl{display:inline-block;width:0;height:0;vertical-align:baseline}
+
+/* ---------- the shop's mobile page, rebuilt as layers ---------- */
+#page{left:110px;top:110px;width:860px;height:1700px;background:var(--paper);border-radius:52px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(43,35,32,.05),0 50px 110px -60px rgba(43,35,32,.3);z-index:1}
+#hdr{height:132px;display:flex;align-items:center;justify-content:space-between;padding:0 44px;border-bottom:1px solid var(--line)}
+#siteName{font-size:44px;font-weight:600;letter-spacing:-.01em}
+#nav{height:116px;display:flex;align-items:center;gap:16px;padding:0 44px;border-bottom:1px solid var(--line);white-space:nowrap}
+.cm{display:inline-block;overflow:hidden;padding:6px 2px;margin:-6px -2px;flex:none}
+.chip{display:inline-block;font-size:27px;font-weight:470;line-height:1.2;padding:13px 26px;border:1.5px solid rgba(43,35,32,.2);border-radius:999px}
+#colHead{padding:44px 44px 0}
+#colTitle{font-size:66px;font-weight:520;letter-spacing:-.015em;line-height:1.1}
+#grid{display:grid;grid-template-columns:repeat(2,370px);column-gap:32px;row-gap:40px;padding:34px 44px 0;align-items:start}
+.tile{height:400px;border-radius:24px;background:var(--tile);overflow:hidden;position:relative}
+.tile svg,.tile img{display:block;width:100%;height:100%}
+.tile img{object-fit:cover}
+.name{font-size:34px;font-weight:580;margin-top:20px;line-height:1.2}
+.prow{display:flex;align-items:center;gap:16px;margin-top:10px;font-size:28px;height:44px;white-space:nowrap}
+.now{font-weight:640}
+.was{color:var(--muted);font-size:25px;position:relative}
+.strike{position:absolute;left:-2px;right:-2px;top:54%;height:2px;background:var(--muted);transform-origin:0 50%}
+.badge{font-size:21px;border:1.8px solid var(--ink);border-radius:999px;padding:3px 12px 4px;font-weight:560}
+.sold{display:block;color:var(--muted);font-size:23px;margin-top:6px;line-height:1.2}
+.btnslot{height:72px;margin-top:20px}
+#scrim{position:absolute;inset:0;background:var(--ink);opacity:0}
+#sheet{position:absolute;left:0;right:0;bottom:0;height:900px;background:var(--paper);border-radius:40px 40px 0 0;
+  box-shadow:0 -1px 0 var(--line);padding:30px 48px 48px}
+#grab{width:72px;height:7px;border-radius:4px;background:rgba(43,35,32,.16);margin:0 auto 34px}
+#dTitle{font-size:46px;font-weight:540;line-height:1.2;margin-bottom:34px}
+#dItem{display:flex;gap:26px;align-items:center;margin-bottom:34px}
+#dItem .mini{width:120px;height:136px;border-radius:16px;background:var(--tile);overflow:hidden;flex:none}
+#dItem .mini svg,#dItem .mini img{display:block;width:100%;height:100%;object-fit:cover}
+#dItem .t1{font-size:34px;font-weight:580}
+#dItem .t2{font-size:30px;font-weight:640;margin-top:6px}
+#dDiv{height:1.5px;background:var(--line);margin-bottom:34px;transform-origin:0 50%}
+#dDelivery{font-size:38px;font-weight:560;margin-bottom:16px;line-height:1.2}
+#dCut{font-size:29px;line-height:1.35;margin-bottom:14px}
+#dCut b{font-weight:680}
+#dWa{font-size:26px;line-height:1.4;color:var(--muted);margin-bottom:30px}
+#waSlot{height:88px;margin-bottom:24px}
+#dKV{font-size:24px;color:var(--muted);text-align:center}
+.blk{display:block;overflow:hidden;padding:.1em 0 .32em;margin:-.1em 0 -.32em}
+.blk>.i{display:block}
+
+/* ---------- hook and finale: authored in screen pixels, scaled into the world ---------- */
+#hook,#finale{width:1080px;height:1920px;transform-origin:0 0;z-index:2}
+#finale{z-index:4}
+.fl{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap;line-height:1}
+.hl{font-size:220px;font-weight:520;letter-spacing:-.025em}
+#hToday{color:var(--accent)}
+.fo{font-size:220px;font-weight:560;letter-spacing:-.025em;color:var(--cream)}
+.fd{font-size:190px;font-weight:540;letter-spacing:-.025em}
+#fToday{color:var(--accent)}
+#fMark{font-size:148px;font-weight:560;letter-spacing:-.02em}
+#fCta{font-size:44px;font-weight:440;color:var(--muted)}
+#fUrl{font-size:40px;font-weight:620}
+
+/* ---------- the through-line object ---------- */
+#pill{background:var(--accent);overflow:hidden;z-index:3;transform-origin:50% 50%}
+.lab{position:absolute;left:50%;top:50%;white-space:nowrap;color:var(--cream);line-height:1.2}
+.lab>span{display:inline-block}
+.hand{position:absolute;left:0;top:0;background:var(--cream);transform-origin:50% 100%}
+/* touch pointer: this is a phone layout, so taps instead of a mouse arrow */
+#tap{z-index:5;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(43,35,32,.16);border:2.5px solid rgba(43,35,32,.5)}
+</style></head>
+<body><div id="stage">
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="fbPill" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB"><feGaussianBlur id="gbPill" stdDeviation="0 0"/></filter>
+  <filter id="fbCam" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB"><feGaussianBlur id="gbCam" stdDeviation="0 0"/></filter>
+</defs></svg>
+<div id="cam">
+
+  <div id="page" class="abs">
+    <div id="hdr">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2B2320" stroke-width="1.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <div id="siteName">The Lily Bar</div>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2B2320" stroke-width="1.5" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+    </div>
+    <div id="nav"></div>
+    <div id="colHead"><div id="colTitle"><span class="m"><span class="i" id="colTitleI">Signature Bouquets</span></span></div></div>
+    <div id="grid"></div>
+    <div id="scrim"></div>
+    <div id="sheet">
+      <div id="grab"></div>
+      <div id="dTitle" class="blk"><span class="i">Your cart</span></div>
+      <div id="dItemM" class="blk"><div class="i"><div id="dItem"><div class="mini" id="dMini"></div><div><div class="t1" id="dName"></div><div class="t2" id="dPrice"></div></div></div></div></div>
+      <div id="dDiv"></div>
+      <div id="dDelivery" class="blk"><span class="i">Delivery</span></div>
+      <div id="dCut" class="blk"><span class="i">Cut-off time for same-day delivery: <b>5PM</b></span></div>
+      <div id="dWa" class="blk"><span class="i">For same-day and next-day delivery, WhatsApp us directly.</span></div>
+      <div id="waSlot"></div>
+      <div id="dKV" class="blk"><span class="i">Delivering across the Klang Valley</span></div>
+    </div>
+  </div>
+
+  <div id="hook" class="abs">
+    <div class="fl hl" style="top:540px"><span class="m"><span class="i" id="hw0">Need</span></span></div>
+    <div class="fl hl" style="top:770px"><span class="m"><span class="i" id="hw1">flowers</span></span></div>
+    <div class="fl hl" style="top:1000px"><span class="m"><span class="i" id="hw2"><span id="hToday" style="display:inline-block">today</span><span id="hQ" style="display:inline-block">?</span><span class="bl" id="hBL"></span></span></span></div>
+  </div>
+
+  <div id="pill" class="abs">
+    <div class="lab" id="lab0" style="font-size:27px;font-weight:560"><span>Signature Bouquets</span></div>
+    <div class="lab" id="lab1" style="font-size:30px;font-weight:660"><span>RM 339</span></div>
+    <div class="lab" id="lab2" style="font-size:29px;font-weight:580"><span>Add to Cart</span></div>
+    <div class="lab" id="lab3" style="font-size:32px;font-weight:580"><span>WhatsApp us</span></div>
+    <div id="hMin" class="hand"></div><div id="hHour" class="hand"></div><div id="hCap" class="hand"></div>
+  </div>
+
+  <div id="finale" class="abs">
+    <div class="fl fo" style="top:700px"><span class="m"><span class="i" id="fo0">Order by</span></span></div>
+    <div class="fl fo" style="top:930px"><span class="m"><span class="i" id="fo1">5PM.</span></span></div>
+    <div id="fDel" class="abs" style="top:900px;width:1080px">
+      <div class="fl fd" style="position:relative"><span class="m"><span class="i" id="fd0">Delivered</span></span></div>
+      <div class="fl fd" style="position:relative;margin-top:6px"><span class="m"><span class="i" id="fd1"><span id="fToday">today.</span></span></span></div>
+    </div>
+    <div class="fl" id="fMark" style="top:790px"><span class="m"><span id="fMarkI"></span><span class="bl" id="fBL"></span></span></div>
+    <div class="fl" id="fCta" style="top:1000px"><span class="m"><span class="i" id="fc0">Order by 5PM for same-day delivery</span></span></div>
+    <div class="fl" id="fUrl" style="top:1074px"><span class="m"><span class="i" id="fu0">thelilybar.co</span></span></div>
+  </div>
+
+  <div id="tap" class="abs"></div>
+</div>
+</div>
+<script>
+window.W = 1080; window.H = 1920;
+window.BPM = 120; window.OFFSET = 0;
+window.DURATION = 15;
+const W = 1080, H = 1920;
+
+// Real data from the shop's own listings (search-index snapshots of thelilybar.co).
+// img: put the shop's product photo here (e.g. 'assets/elora.jpg'); without it the tile shows a line drawing.
+const NAV = ['New Collection', 'Signature Bouquets', 'Fresh Bouquets', 'Soap Bouquets', 'Blue Series', 'Bridal Bouquet', 'Sympathy Flowers'];
+const PRODUCTS = [
+  { name: 'Elora', now: 'RM 339', was: 'RM 349', off: '-3%', sold: 31, img: null },
+  { name: 'Rubelle', now: 'RM 459', was: 'RM 468', off: '-2%', sold: 27, img: null },
+  { name: 'Sylva', now: 'RM 259', was: 'RM 268', off: '-3%', img: null },
+  { name: 'Cinderella', now: 'RM 179 – RM 429', img: null },
+];
+const TILE = ['#EFE5DA', '#EBE4DC', '#EEE6D9', '#ECE3DF'];
+
+// ---- motion kit: every helper is a pure function of time ----
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ease = {
+  out: p => 1 - Math.pow(1 - p, 3),
+  in: p => p * p * p,
+  expo: p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p),
+  quint: p => 1 - Math.pow(1 - p, 5),
+};
+function spring(t, f = 2.4, z = 0.85) {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f;
+  if (z >= 1) return 1 - Math.exp(-w * t) * (1 + w * t);
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+}
+function springsK(t, keys) {
+  let v = keys[0][1];
+  for (let i = 1; i < keys.length; i++) v += (keys[i][1] - keys[i - 1][1]) * spring(t - keys[i][0], keys[i][2] ?? 2.2, keys[i][3] ?? 0.85);
+  return v;
+}
+function rand(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const $ = id => document.getElementById(id);
+const gauss = (x, w) => Math.exp(-(x * x) / (2 * w * w));
+function riseY(t, tin, tout = 1e9, dir = -1, f = 2.6, z = 0.9) {
+  if (t < tin) return 160;
+  let y = (1 - spring(t - tin, f, z)) * 160;
+  if (t > tout) y = lerp(y, dir * 160, ease.in(seg(t, tout, tout + 0.16)));
+  return y;
+}
+const setY = (el, y) => { el.style.transform = `translateY(${y}%)`; };
+const PUSH = Math.log(1.04) / 2;
+const push = t => Math.exp(PUSH * t);
+
+// ---- static layers ----
+function bouquetSVG(seed, sw = 1.5) {
+  const r = rand(seed * 7919 + 13), j = a => (r() - .5) * 2 * a;
+  const cx = 165, mouth = 176;
+  let s = `<svg viewBox="0 0 330 380" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#2B2320" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">`;
+  s += `<path d="M${cx} 356 L${cx - 124} ${mouth - 8} Q${cx} ${mouth - 30} ${cx + 124} ${mouth - 8} Z" fill="#E6D9C9"/>`;
+  for (const [lx, ly, a] of [[-120, 6, -50], [120, 10, 48], [-76, -94, -24], [82, -98, 26], [-2, -124, 3]]) {
+    const x = cx + lx + j(4), y = mouth - 38 + ly + j(4), L = 46 + j(6);
+    s += `<path transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(a + j(8)).toFixed(1)})" d="M0 ${L * .5}Q${L * .34} 0 0 ${-L * .5}Q${-L * .34} 0 0 ${L * .5}ZM0 ${L * .42}L0 ${-L * .36}" fill="#DFE1D2"/>`;
+  }
+  const base = [[0, -76, 33], [-60, -54, 30], [62, -56, 31], [-98, -12, 27], [100, -10, 28], [-34, -16, 32], [34, -14, 33], [0, 20, 30], [-66, 28, 26], [68, 28, 27]];
+  const skip = new Set([Math.floor(r() * 10), Math.floor(r() * 10)]);
+  const blooms = base.filter((_, i) => !skip.has(i) || i < 3).map(([bx, by, br]) => [cx + bx + j(5), mouth - 36 + by + j(5), br + j(3)]).sort((a, b) => a[1] - b[1]);
+  for (const [x, y, R] of blooms) {
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${R.toFixed(1)}" fill="#FBF6F0"/>`;
+    s += `<path d="M${(x - R * .52).toFixed(1)} ${(y + R * .08).toFixed(1)}A${(R * .5).toFixed(1)} ${(R * .5).toFixed(1)} 0 1 1 ${(x + R * .34).toFixed(1)} ${(y + R * .4).toFixed(1)}"/>`;
+    s += `<path d="M${(x - R * .18).toFixed(1)} ${(y - R * .1).toFixed(1)}A${(R * .22).toFixed(1)} ${(R * .22).toFixed(1)} 0 1 0 ${(x + R * .2).toFixed(1)} ${(y + R * .02).toFixed(1)}"/>`;
+  }
+  s += `<path d="M${cx} 360 L${cx - 86} ${mouth + 24} Q${cx} ${mouth + 10} ${cx + 86} ${mouth + 24} Z" fill="#F4ECE2"/>`;
+  s += `<path d="M${cx - 86} ${mouth + 24} L${cx - 8} 356" stroke-opacity=".45"/>`;
+  const ry = 306;
+  s += `<path d="M${cx} ${ry}q-30-16-34 2q2 14 34-2Z" fill="#FBF6F0"/><path d="M${cx} ${ry}q30-16 34 2q-2 14-34-2Z" fill="#FBF6F0"/>`;
+  s += `<path d="M${cx - 3} ${ry + 3}l-12 24M${cx + 3} ${ry + 3}l12 24"/><circle cx="${cx}" cy="${ry}" r="5" fill="#FBF6F0"/>`;
+  return s + '</svg>';
+}
+const art = (p, i, sw) => p.img ? `<img src="${p.img}" alt="${p.name}">` : bouquetSVG(i + 1, sw);
+
+$('nav').innerHTML = NAV.map((n, i) => `<span class="cm"><span class="chip" id="chip${i}"${i === 1 ? ' style="border-color:transparent"' : ''}>${n}</span></span>`).join('');
+$('grid').innerHTML = PRODUCTS.map((p, i) => `
+  <div class="card" id="card${i}">
+    <div class="tile" style="background:${TILE[i]}">${art(p, i, 1.6)}</div>
+    <div class="name">${p.name}</div>
+    <div class="prow" id="prow${i}">
+      <span class="now" id="now${i}">${p.now}</span>
+      ${p.was ? `<span class="m"><span class="i was" id="was${i}">${p.was}<i class="strike" id="strike${i}"></i></span></span>` : ''}
+      ${p.off ? `<span class="badge" id="badge${i}">${p.off}</span>` : ''}
+    </div>
+    ${p.sold ? `<span class="m sold"><span class="i" id="sold${i}">${p.sold} sold</span></span>` : ''}
+    ${i === 0 ? '<div class="btnslot" id="btnSlot"></div>' : ''}
+  </div>`).join('');
+$('dMini').innerHTML = art(PRODUCTS[0], 0, 4);
+$('dName').textContent = PRODUCTS[0].name;
+$('dPrice').textContent = PRODUCTS[0].now;
+$('fMarkI').innerHTML = [...'The Lıly Bar'].map((c, i) => `<span class="i" id="wm${i}">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+
+const camEl = $('cam'), page = $('page'), pill = $('pill'), tap = $('tap');
+let M = null, CAM = null, PK = null, CK = null;
+
+function rectOf(el) { const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height, cx: b.left + b.width / 2, cy: b.top + b.height / 2, r: b.right, b: b.bottom }; }
+function glyphDot(ch, font) {
+  const S = 700, c = document.createElement('canvas'); c.width = c.height = S;
+  const g = c.getContext('2d'); g.font = font; g.fillText(ch, 100, 480);
+  const d = g.getImageData(0, 0, S, S).data, on = (x, y) => d[(y * S + x) * 4 + 3] > 110;
+  const row = y => { for (let x = 0; x < S; x++) if (on(x, y)) return true; return false; };
+  let y1 = S - 1; while (y1 > 0 && !row(y1)) y1--;
+  let y0 = y1; while (y0 > 0 && row(y0 - 1)) y0--;
+  let x0 = S, x1 = 0;
+  for (let y = y0; y <= y1; y++) for (let x = 0; x < S; x++) if (on(x, y)) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
+  return { cx: (x0 + x1 + 1) / 2 - 100, cy: (y0 + y1 + 1) / 2 - 480, d: Math.max(x1 - x0 + 1, y1 - y0 + 1) };
+}
+function tittle(font) {
+  const S = 600, a = document.createElement('canvas'), b = document.createElement('canvas');
+  a.width = a.height = b.width = b.height = S;
+  const ga = a.getContext('2d'), gb = b.getContext('2d');
+  ga.font = gb.font = font; ga.fillText('i', 100, 420); gb.fillText('ı', 100, 420);
+  const da = ga.getImageData(0, 0, S, S).data, db = gb.getImageData(0, 0, S, S).data;
+  let x0 = S, x1 = 0, y0 = S, y1 = 0;
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const k = (y * S + x) * 4 + 3;
+    if (da[k] > 110 && db[k] < 20) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  }
+  return { cx: (x0 + x1 + 1) / 2 - 100, cy: (y0 + y1 + 1) / 2 - 420, d: Math.max(x1 - x0 + 1, y1 - y0 + 1) };
+}
+
+const imgsReady = () => Promise.all([...document.images].map(i => i.complete ? i.decode().catch(() => 0) : new Promise(r => { i.onload = i.onerror = r; })));
+
+window.ready = document.fonts.load('520 220px Fraunces').then(() => document.fonts.ready).then(imgsReady).then(() => {
+  camEl.style.transform = 'none';
+  for (const id of ['hook', 'finale']) $(id).style.transform = 'none';
+  const R = {};
+  R.page = rectOf(page);
+  R.sig = rectOf($('chip1'));
+  R.card = PRODUCTS.map((_, i) => rectOf($('card' + i)));
+  R.prow0 = rectOf($('prow0'));
+  R.now0 = rectOf($('now0'));
+  R.btn = rectOf($('btnSlot'));
+  R.sheet = rectOf($('sheet'));
+  R.dTop = rectOf($('dTitle'));
+  R.dCut = rectOf($('dCut'));
+  R.wa = rectOf($('waSlot'));
+  R.dKV = rectOf($('dKV'));
+  R.hToday = rectOf($('hToday')); R.hQ = rectOf($('hQ')); R.hBL = rectOf($('hBL'));
+  R.fDel = rectOf($('fDel'));
+  R.wmI = rectOf($('wm5')); R.fBL = rectOf($('fBL'));
+  M = R;
+
+  // --- hook: "today?" sits exactly on the Signature Bouquets chip ---
+  const navPill = { cx: R.sig.cx, cy: R.sig.cy, w: R.sig.w, h: R.sig.h };
+  const hu = { x: R.hToday.x, r: R.hQ.r }; hu.w = hu.r - hu.x; hu.cx = (hu.x + hu.r) / 2;
+  const zh = clamp(hu.w / navPill.w, 2.0, 2.9);
+  const xhMid = R.hBL.y - 0.26 * 220;
+  const ox = navPill.cx - hu.cx / zh, oy = navPill.cy - xhMid / zh;
+  const hw = (x, y) => ({ x: ox + x / zh, y: oy + y / zh });
+  M.hook = { zh, ox, oy };
+  const qd = glyphDot('?', '520 220px Fraunces');
+  const dotC = hw(R.hQ.x + qd.cx, R.hBL.y + qd.cy);
+  const hookPill = { cx: hw(hu.cx, 0).x, cy: navPill.cy, w: hu.w / zh + 16, h: 0.6 * 220 / zh };
+
+  // --- camera ---
+  CAM = { x: [[0, ox + (W / 2) / zh]], y: [[0, oy + (H / 2) / zh]], lz: [[0, Math.log(zh)]] };
+  const key = (time, x, y, z, f = 1.4, d = 0.92) => {
+    CAM.x.push([time, x, f, d]); CAM.y.push([time, y, f, d]);
+    CAM.lz.push([time, Math.log(z / push(time + 0.45)), f, d]);
+  };
+  const fitZ = (w, h, pw = 200, ph = 360) => Math.min(W / (w + pw), H / (h + ph));
+  key(2.00, R.page.cx, R.sig.cy + 260, 1.16, 1.5, 0.92);
+  key(2.55, lerp(R.page.cx, R.sig.cx, 0.5), R.sig.cy + 140, 1.5, 1.3, 0.92);
+  key(3.35, R.page.cx, R.page.cy, 1.02, 1.4, 0.92);
+  key(4.00, R.card[0].cx, R.card[0].cy, fitZ(R.card[0].w, R.card[0].h, 280, 420), 1.5, 0.9);
+  key(4.85, R.prow0.cx + 10, R.prow0.cy - 50, 2.35, 1.3, 0.92);
+  key(5.90, R.card[0].cx, (R.prow0.cy + R.btn.cy) / 2 - 10, 2.1, 1.5, 0.9);
+  const sBlock = { x: R.sheet.x, y: R.dTop.y - 40, r: R.sheet.r, b: R.dKV.b + 40 };
+  key(6.58, R.sheet.cx, (sBlock.y + sBlock.b) / 2, fitZ(sBlock.r - sBlock.x, sBlock.b - sBlock.y, 120, 300), 1.6, 0.9);
+  // stay wide enough that the left-aligned cart lines never crop, until they leave after the tap
+  const fitW = W / (R.sheet.w - 56);
+  const sMid = (sBlock.y + sBlock.b) / 2;
+  key(7.55, R.sheet.cx, sMid + 20, Math.min(1.25, fitW), 1.3, 0.92);
+  key(8.45, R.wa.cx, sMid + 70, fitW * 0.99, 1.3, 0.92);
+  key(9.12, R.wa.cx, R.wa.cy, 1.75, 1.4, 0.92);
+  key(9.45, R.wa.cx, R.wa.cy, 2.2, 1.6, 0.92);
+
+  // --- finale lives where the camera is at the payoff ---
+  const cf = cam(10.4), zf = cf.z;
+  const fl = cf.x - (W / 2) / zf, ft = cf.y - (H / 2) / zf;
+  const fw = (x, y) => ({ x: fl + x / zf, y: ft + y / zf });
+  M.fin = { zf, fl, ft };
+  const D = 300;
+  const disc = { ...fw(W / 2, R.fDel.y - 70 - D / 2), w: D / zf, h: D / zf };
+  const td = tittle('560 148px Fraunces');
+  const tt = fw(R.wmI.x + td.cx, R.fBL.y + td.cy);
+  const tit = { x: tt.x, y: tt.y, w: td.d / zf, h: td.d / zf };
+  const view = { w: W / zf, h: H / zf };
+  const fill = { x: cf.x, y: cf.y, w: view.w * 1.9, h: view.h * 1.7 };
+
+  // --- pill keys ---
+  PK = { x: [[0, dotC.x]], y: [[0, dotC.y]], w: [[0, qd.d / zh]], h: [[0, qd.d / zh]], r: [[0, qd.d / zh / 2]] };
+  const pk = (time, x, y, w, h, r, f = 2.2, d = 0.85) => {
+    for (const [k, v] of [['x', x], ['y', y], ['w', w], ['h', h], ['r', r]]) PK[k].push([time, v, f, d]);
+  };
+  pk(1.56, hookPill.cx, hookPill.cy, hookPill.w, hookPill.h, 1e5, 2.4, 0.84);
+  pk(2.00, navPill.cx, navPill.cy, navPill.w, navPill.h, 1e5, 2.2, 0.86);
+  pk(4.00, R.now0.cx, R.now0.cy, R.now0.w + 30, 54, 1e5, 2.0, 0.86);
+  pk(6.00, R.btn.cx, R.btn.cy, R.btn.w, R.btn.h, 1e5, 2.4, 0.85);
+  pk(6.58, R.wa.cx, R.wa.cy, R.wa.w, R.wa.h, 1e5, 1.7, 0.88);
+  pk(9.45, R.wa.cx, R.wa.cy, R.wa.w * 1.1, R.wa.h * 1.6, 1e5, 2.2, 0.86);
+  pk(9.86, fill.x, fill.y, fill.w, fill.h, 1e5, 2.8, 1.0);
+  pk(10.95, disc.x, disc.y, disc.w, disc.h, 1e5, 2.6, 0.9);
+  pk(12.05, tit.x, tit.y, tit.w, tit.h, 1e5, 1.9, 0.84);
+
+  // --- taps (world) ---
+  CK = { x: [[0, R.sig.cx + 380]], y: [[0, R.sig.cy + 1100]] };
+  const ck = (time, x, y, f = 1.5, d = 0.95) => { CK.x.push([time, x, f, d]); CK.y.push([time, y, f, d]); };
+  ck(2.42, R.sig.cx + 10, R.sig.cy + 4, 1.5);
+  ck(3.25, R.sig.cx + 70, R.sig.cy + 300, 1.2);
+  ck(4.05, R.card[0].x + R.card[0].w * 0.72, R.card[0].y + 300, 1.3);
+  ck(5.85, R.btn.cx + 30, R.btn.cy + 4, 1.8);
+  ck(6.62, R.wa.x + R.wa.w * 0.78, R.wa.cy + 140, 1.4);
+  ck(8.48, R.wa.cx + 120, R.wa.cy + 6, 1.8);
+
+  window.READY = true;
+  seek(0);
+});
+
+function cam(t) { return { x: springsK(t, CAM.x), y: springsK(t, CAM.y), z: Math.exp(springsK(t, CAM.lz)) * push(t) }; }
+function pillAt(t) {
+  return { x: springsK(t, PK.x), y: springsK(t, PK.y), w: Math.max(0, springsK(t, PK.w)), h: Math.max(0, springsK(t, PK.h)), r: Math.max(0, springsK(t, PK.r)) };
+}
+const toScreen = (x, y, c) => [(x - c.x) * c.z + W / 2, (y - c.y) * c.z + H / 2];
+const LABELS = [['lab0', 1.70, 3.98], ['lab1', 4.16, 5.98], ['lab2', 6.12, 6.56], ['lab3', 6.84, 9.40]];
+const CLICKS = [3.0, 6.5, 9.0];
+
+function seek(t) {
+  if (!M) return;
+  const ft = window.FRAME_T ?? t;
+
+  // ---------- camera ----------
+  const c = cam(t), c0 = cam(t - 1 / 240);
+  camEl.style.transform = `translate(${W / 2}px,${H / 2}px) scale(${c.z}) translate(${-c.x}px,${-c.y}px)`;
+  const cvx = (c.x - c0.x) * c.z * 240, cvy = (c.y - c0.y) * c.z * 240;
+  const camBlur = v => clamp((Math.abs(v) - 1400) / 260, 0, 14) / c.z;
+  const cbx = camBlur(cvx), cby = camBlur(cvy);
+  if (cbx + cby > 0.05) { $('gbCam').setAttribute('stdDeviation', `${cbx.toFixed(2)} ${cby.toFixed(2)}`); page.style.filter = 'url(#fbCam)'; }
+  else page.style.filter = 'none';
+
+  // ---------- hook ----------
+  const hk = M.hook;
+  $('hook').style.transform = `translate(${hk.ox}px,${hk.oy}px) scale(${1 / hk.zh})`;
+  $('hook').style.visibility = t < 2.4 ? 'visible' : 'hidden';
+  setY($('hw0'), riseY(t, -0.06, 1.88, -1));
+  setY($('hw1'), riseY(t, 0.5, 1.92, -1));
+  setY($('hw2'), riseY(t, 1.0));
+  $('hQ').style.clipPath = `inset(${(t < 1.5 ? 0 : 100 * ease.out(seg(t, 1.5, 1.62)))}% 0 0 0)`;
+  $('hQ').style.visibility = t < 1.62 ? 'visible' : 'hidden';
+
+  // ---------- the pill ----------
+  const p = pillAt(t), pv = pillAt(t - 1 / 240);
+  const sq = 1 - CLICKS.reduce((a, tc) => a + 0.075 * gauss(t - tc - 0.05, 0.05), 0);
+  pill.style.visibility = t >= 1.5 ? 'visible' : 'hidden';
+  pill.style.width = p.w + 'px'; pill.style.height = p.h + 'px';
+  pill.style.borderRadius = Math.min(p.r, p.w / 2, p.h / 2) + 'px';
+  pill.style.transform = `translate(${p.x - p.w / 2}px,${p.y - p.h / 2}px) scale(${sq})`;
+  if (t >= 1.5) {
+    const leftC = (p.x - p.w / 2 - hk.ox) * hk.zh;
+    const cut = clamp((M.hToday.r - leftC) / M.hToday.w, 0, 1);
+    $('hToday').style.clipPath = `inset(-20% ${100 * (t >= 2.0 ? 1 : cut)}% -20% -5%)`;
+  } else $('hToday').style.clipPath = 'none';
+  const [sx, sy] = toScreen(p.x, p.y, c), [sx0, sy0] = toScreen(pv.x, pv.y, c0);
+  const pb = v => clamp((Math.abs(v) - 900) / 240, 0, 16) / c.z;
+  const pbx = pb((sx - sx0) * 240), pby = pb((sy - sy0) * 240);
+  if (pbx + pby > 0.05 && t < 9.9) { $('gbPill').setAttribute('stdDeviation', `${pbx.toFixed(2)} ${pby.toFixed(2)}`); pill.style.filter = 'url(#fbPill)'; }
+  else pill.style.filter = 'none';
+  for (const [id, tin, tout] of LABELS) {
+    const el = $(id), fs = parseFloat(el.style.fontSize), travel = p.h / 2 + fs * 0.6 + 4;
+    if (t < tin || t > tout + 0.15) { el.style.visibility = 'hidden'; continue; }
+    el.style.visibility = 'visible';
+    let off = (1 - spring(t - tin, 2.8, 0.9)) * travel;
+    if (t > tout) off = lerp(off, -travel, ease.in(seg(t, tout, tout + 0.14)));
+    el.style.transform = `translate(-50%,-50%) translateY(${off}px)`;
+  }
+  const hv = t >= 11.2 && t < 12.2;
+  for (const id of ['hMin', 'hHour', 'hCap']) $(id).style.visibility = hv ? 'visible' : 'hidden';
+  if (hv) {
+    const g = spring(t - 11.24, 2.4, 0.86) * (1 - ease.in(seg(t, 12.0, 12.14)));
+    const w = Math.min(p.w, p.h), hand = (id, len, th, ang) => {
+      const e = $(id);
+      e.style.width = th + 'px'; e.style.height = len + 'px'; e.style.borderRadius = th / 2 + 'px';
+      e.style.transform = `translate(${p.w / 2 - th / 2}px,${p.h / 2 - len}px) rotate(${ang}deg) scaleY(${g})`;
+    };
+    hand('hMin', w * 0.36, w * 0.042, 0);
+    hand('hHour', w * 0.25, w * 0.054, 150 * spring(t - 11.55, 1.8, 0.84));
+    const cap = $('hCap'), cs = w * 0.1 * g;
+    cap.style.width = cap.style.height = cs + 'px'; cap.style.borderRadius = '50%';
+    cap.style.transform = `translate(${p.w / 2 - cs / 2}px,${p.h / 2 - cs / 2}px)`;
+  }
+
+  // ---------- page ----------
+  const pr = t < 2.0 ? 0 : 2600 * ease.expo(seg(t, 2.0, 2.8));
+  page.style.visibility = (t >= 2.0 && t < 10.3) ? 'visible' : 'hidden';
+  page.style.clipPath = `circle(${pr}px at ${M.sig.cx - M.page.x}px ${M.sig.cy - M.page.y}px)`;
+  NAV.forEach((_, i) => { if (i !== 1) setY($('chip' + i), riseY(t, 2.04 + 0.06 * Math.abs(i - 1))); });
+  // the chip the pill leaves behind stays marked as selected
+  $('chip1').style.borderColor = `rgba(43,35,32,${0.9 * ease.out(seg(t, 4.04, 4.35))})`;
+  setY($('colTitleI'), riseY(t, 3.42));
+  PRODUCTS.forEach((pd, i) => {
+    const t0 = 3.5 + 0.08 * i, e = $('card' + i);
+    e.style.clipPath = `inset(0 0 ${100 * (1 - ease.quint(seg(t, t0, t0 + 0.5)))}% 0)`;
+    e.style.transform = `translateY(${(1 - spring(t - t0, 2.2, 0.88)) * 40}px)`;
+  });
+  $('now0').style.opacity = t >= 6.0 ? 1 : 0;
+  setY($('was0'), riseY(t, 4.5));
+  $('strike0').style.transform = `scaleX(${ease.out(seg(t, 4.62, 4.92))})`;
+  $('badge0').style.clipPath = `inset(-10% ${100 * (1 - ease.out(seg(t, 5.0, 5.3)))}% -10% -10%)`;
+  setY($('sold0'), riseY(t, 5.5));
+  $('sold0').textContent = Math.round(PRODUCTS[0].sold * ease.out(seg(ft, 5.5, 5.95))) + ' sold';
+  // cart bottom sheet wipes up from the bottom edge
+  $('scrim').style.opacity = 0.16 * ease.out(seg(t, 6.52, 6.9));
+  $('sheet').style.clipPath = `inset(${100 * (1 - ease.expo(seg(t, 6.52, 6.98)))}% 0 0 0 round 40px 40px 0 0)`;
+  // after the tap on "WhatsApp us" every other line drops away, leaving the pill alone
+  setY($('dTitle').firstElementChild, riseY(t, 6.74, 9.08, 1));
+  setY($('dItemM').firstElementChild, riseY(t, 7.0, 9.1, 1));
+  $('dDiv').style.transform = `scaleX(${ease.out(seg(t, 7.06, 7.45)) * (1 - ease.in(seg(t, 9.1, 9.26)))})`;
+  setY($('dDelivery').firstElementChild, riseY(t, 7.5, 9.12, 1));
+  setY($('dCut').firstElementChild, riseY(t, 7.56, 9.14, 1));
+  setY($('dWa').firstElementChild, riseY(t, 8.0, 9.16, 1));
+  setY($('dKV').firstElementChild, riseY(t, 8.5, 9.12, 1));
+
+  // ---------- taps ----------
+  const tv = t >= 2.4 && t < 9.5;
+  tap.style.visibility = tv ? 'visible' : 'hidden';
+  if (tv) {
+    const x = springsK(t, CK.x), y = springsK(t, CK.y);
+    const press = 1 - CLICKS.reduce((a, tc) => a + 0.24 * gauss(t - tc - 0.04, 0.05), 0);
+    const grow = spring(t - 2.4, 2.6, 0.9) * (1 - ease.in(seg(t, 9.28, 9.46)));
+    tap.style.transform = `translate(${x}px,${y}px) scale(${press * grow})`;
+  }
+
+  // ---------- finale ----------
+  const fn = M.fin;
+  $('finale').style.transform = `translate(${fn.fl}px,${fn.ft}px) scale(${1 / fn.zf})`;
+  $('finale').style.visibility = t >= 9.9 ? 'visible' : 'hidden';
+  setY($('fo0'), riseY(t, 10.04, 10.86, -1));
+  setY($('fo1'), riseY(t, 10.5, 10.88, -1));
+  setY($('fd0'), riseY(t, 11.2, 12.0, 1));
+  setY($('fd1'), riseY(t, 11.55, 12.02, 1));
+  [...'The Lıly Bar'].forEach((_, i) => setY($('wm' + i), riseY(t, 12.16 + 0.03 * i, 1e9, -1, 2.4, 0.9)));
+  setY($('fc0'), riseY(t, 13.0));
+  setY($('fu0'), riseY(t, 13.5));
+}
+window.seek = seek;
+</script></body></html>

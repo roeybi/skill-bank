@@ -1,0 +1,207 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Lily Bar soundtrack</title></head>
+<body><script>
+// Original track, synthesized from scratch with the Web Audio API (OfflineAudioContext).
+// 120 BPM, D major. A kick on every beat, a hit on every scene change, UI sounds where something visibly happens.
+const SR = 48000, DUR = 15, BEAT = 0.5;
+const SCENE_HITS = [2.0, 4.0, 6.0, 12.0];   // 10.0 gets the big hit
+const CLICKS = [3.0, 6.5, 9.0];
+
+function seeded(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 * 2 - 1; }; }
+const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+
+window.renderAudio = async function () {
+  const ctx = new OfflineAudioContext(2, SR * DUR, SR);
+  const rnd = seeded(11);
+  const noise = ctx.createBuffer(1, SR * 2, SR);
+  { const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = rnd(); }
+
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.knee.value = 10; comp.ratio.value = 3; comp.attack.value = 0.004; comp.release.value = 0.18;
+  const master = ctx.createGain(); master.gain.value = 0.9;
+  master.connect(comp); comp.connect(ctx.destination);
+  // music bus ducks on every kick (sidechain feel); drums and sfx bypass it
+  const music = ctx.createGain(); music.connect(master);
+  const drums = ctx.createGain(); drums.connect(master);
+  const sfx = ctx.createGain(); sfx.connect(master);
+
+  const env = (g, t, a, peak, d, sustain = 0) => {
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a);
+    g.gain.setTargetAtTime(sustain, t + a, d / 4);
+  };
+  const noiseSrc = (t, dur, rate = 1) => { const s = ctx.createBufferSource(); s.buffer = noise; s.loop = true; s.playbackRate.value = rate; s.start(t, (t * 0.37) % 1.5); s.stop(t + dur); return s; };
+
+  function kick(t, g = 1) {
+    const o = ctx.createOscillator(), a = ctx.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.13);
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(0.95 * g, t + 0.003); a.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+    o.connect(a); a.connect(drums); o.start(t); o.stop(t + 0.45);
+    // click of the beater
+    const n = noiseSrc(t, 0.02), f = ctx.createBiquadFilter(), b = ctx.createGain();
+    f.type = 'highpass'; f.frequency.value = 2500; b.gain.setValueAtTime(0.18 * g, t); b.gain.exponentialRampToValueAtTime(0.001, t + 0.018);
+    n.connect(f); f.connect(b); b.connect(drums);
+    // duck the music
+    music.gain.setValueAtTime(0.42, t); music.gain.setTargetAtTime(1, t + 0.02, 0.09);
+  }
+  function hat(t, g = 0.12, open = false) {
+    const n = noiseSrc(t, open ? 0.25 : 0.06, 1.3), f = ctx.createBiquadFilter(), a = ctx.createGain();
+    f.type = 'highpass'; f.frequency.value = 7500;
+    a.gain.setValueAtTime(g, t); a.gain.exponentialRampToValueAtTime(0.001, t + (open ? 0.22 : 0.05));
+    n.connect(f); f.connect(a); a.connect(drums);
+  }
+  function clap(t, g = 0.22) {
+    const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1500; f.Q.value = 0.8; f.connect(drums);
+    for (const dt of [0, 0.011, 0.022]) {
+      const n = noiseSrc(t + dt, 0.2), a = ctx.createGain();
+      a.gain.setValueAtTime(g * (dt ? 0.6 : 1), t + dt); a.gain.exponentialRampToValueAtTime(0.001, t + dt + (dt === 0.022 ? 0.16 : 0.03));
+      n.connect(a); a.connect(f);
+    }
+  }
+  function pad(t, notes, dur, g = 0.05) {
+    const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1300; f.Q.value = 0.3;
+    const a = ctx.createGain(); a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + 0.25);
+    a.gain.setValueAtTime(g, t + dur - 0.3); a.gain.linearRampToValueAtTime(0, t + dur);
+    f.connect(a); a.connect(music);
+    notes.forEach((n, i) => [-6, 6].forEach(det => {
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = midi(n); o.detune.value = det + i;
+      const og = ctx.createGain(); og.gain.value = 0.5; o.connect(og); og.connect(f); o.start(t); o.stop(t + dur);
+    }));
+  }
+  function keys(t, n, g = 0.07, dur = 0.5) {   // soft electric-piano-ish pluck
+    const o = ctx.createOscillator(), o2 = ctx.createOscillator(), a = ctx.createGain(), f = ctx.createBiquadFilter();
+    o.type = 'triangle'; o.frequency.value = midi(n); o2.type = 'sine'; o2.frequency.value = midi(n + 12);
+    f.type = 'lowpass'; f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(900, t + dur);
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + 0.004); a.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    const g2 = ctx.createGain(); g2.gain.value = 0.35;
+    o.connect(f); o2.connect(g2); g2.connect(f); f.connect(a); a.connect(music);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+  }
+  function bass(t, n, dur, g = 0.32) {
+    const o = ctx.createOscillator(), a = ctx.createGain(), f = ctx.createBiquadFilter();
+    o.type = 'triangle'; o.frequency.value = midi(n);
+    f.type = 'lowpass'; f.frequency.value = 600;
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + 0.006);
+    a.gain.setValueAtTime(g, t + dur - 0.03); a.gain.linearRampToValueAtTime(0, t + dur);
+    o.connect(f); f.connect(a); a.connect(music); o.start(t); o.stop(t + dur + 0.01);
+  }
+  function hit(t, g = 1, big = false) {
+    kick(t, 1.1 * g);
+    const o = ctx.createOscillator(), a = ctx.createGain();
+    o.frequency.setValueAtTime(90, t); o.frequency.exponentialRampToValueAtTime(38, t + 0.5);
+    a.gain.setValueAtTime(0.6 * g, t); a.gain.exponentialRampToValueAtTime(0.001, t + (big ? 1.4 : 0.8));
+    o.connect(a); a.connect(sfx); o.start(t); o.stop(t + 1.5);
+    const n = noiseSrc(t, big ? 1.6 : 0.7, 0.7), f = ctx.createBiquadFilter(), b = ctx.createGain();
+    f.type = 'lowpass'; f.frequency.setValueAtTime(big ? 7000 : 4000, t); f.frequency.exponentialRampToValueAtTime(300, t + (big ? 1.4 : 0.6));
+    b.gain.setValueAtTime(0.22 * g, t); b.gain.exponentialRampToValueAtTime(0.001, t + (big ? 1.5 : 0.6));
+    n.connect(f); f.connect(b); b.connect(sfx);
+  }
+  function click(t) {
+    const n = noiseSrc(t, 0.03), f = ctx.createBiquadFilter(), a = ctx.createGain();
+    f.type = 'bandpass'; f.frequency.value = 3800; f.Q.value = 1.4;
+    a.gain.setValueAtTime(0.5, t); a.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+    n.connect(f); f.connect(a); a.connect(sfx);
+    const o = ctx.createOscillator(), b = ctx.createGain(); o.frequency.value = 1800;
+    b.gain.setValueAtTime(0.12, t); b.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    o.connect(b); b.connect(sfx); o.start(t); o.stop(t + 0.04);
+  }
+  function pop(t, g = 0.35) {
+    const o = ctx.createOscillator(), a = ctx.createGain();
+    o.frequency.setValueAtTime(1100, t); o.frequency.exponentialRampToValueAtTime(380, t + 0.09);
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + 0.003); a.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    o.connect(a); a.connect(sfx); o.start(t); o.stop(t + 0.14);
+  }
+  function tick(t, g = 0.12) {
+    const o = ctx.createOscillator(), a = ctx.createGain(); o.frequency.value = 2400;
+    a.gain.setValueAtTime(g, t); a.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    o.connect(a); a.connect(sfx); o.start(t); o.stop(t + 0.04);
+  }
+  function whoosh(t, dur = 0.45, up = false, g = 0.22) {
+    const n = noiseSrc(t, dur), f = ctx.createBiquadFilter(), a = ctx.createGain();
+    f.type = 'bandpass'; f.Q.value = 1.2;
+    f.frequency.setValueAtTime(up ? 400 : 3500, t); f.frequency.exponentialRampToValueAtTime(up ? 6000 : 350, t + dur);
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + dur * (up ? 0.85 : 0.35)); a.gain.linearRampToValueAtTime(0, t + dur);
+    n.connect(f); f.connect(a); a.connect(sfx);
+  }
+  function riser(t0, t1) {
+    const n = noiseSrc(t0, t1 - t0), f = ctx.createBiquadFilter(), a = ctx.createGain();
+    f.type = 'bandpass'; f.Q.value = 2; f.frequency.setValueAtTime(300, t0); f.frequency.exponentialRampToValueAtTime(7000, t1);
+    a.gain.setValueAtTime(0.001, t0); a.gain.exponentialRampToValueAtTime(0.2, t1 - 0.02); a.gain.linearRampToValueAtTime(0, t1);
+    n.connect(f); f.connect(a); a.connect(sfx);
+    for (let k = 0; k < 8; k++) keys(t0 + k * 0.25, 74 + k, 0.025 + k * 0.004, 0.22);   // rising notes
+  }
+
+  // ---- harmony: one chord per bar (2 s), payoff resolves home on D ----
+  const CH = [
+    { t: 0, root: 43, notes: [55, 59, 62, 66] },   // Gmaj7
+    { t: 2, root: 45, notes: [57, 61, 64, 66] },   // A6
+    { t: 4, root: 42, notes: [54, 57, 61, 64] },   // F#m7
+    { t: 6, root: 47, notes: [59, 62, 66, 69] },   // Bm7
+    { t: 8, root: 43, notes: [55, 59, 62, 66] },   // Gmaj7
+    { t: 9, root: 45, notes: [57, 62, 64, 67] },   // A7sus4
+    { t: 10, root: 38, notes: [50, 57, 61, 66] },  // Dmaj7 (payoff)
+    { t: 12, root: 43, notes: [55, 59, 62, 69] },  // Gmaj9 (end card)
+    { t: 13, root: 38, notes: [50, 57, 61, 64, 66] }, // Dmaj9 to the end
+  ];
+  CH.forEach((c, i) => {
+    const end = i + 1 < CH.length ? CH[i + 1].t : DUR;
+    pad(c.t, c.notes, end - c.t + 0.05, c.t >= 12 ? 0.04 : c.t >= 10 ? 0.06 : 0.045);
+    // arpeggio in 8ths (16ths in the payoff bar)
+    const step = c.t >= 10 && c.t < 12 ? 0.125 : 0.25;
+    const arp = [...c.notes, c.notes[1] + 12, c.notes[2] + 12];
+    for (let k = 0, tt = c.t; tt < end - 0.01 && tt < 13.0; tt += step, k++) {
+      if (c.t < 2 && k % 2) continue;                         // sparse in the hook
+      keys(tt, arp[(k * 3) % arp.length] + 12, 0.045 + (k % 4 === 0 ? 0.02 : 0), 0.35);
+    }
+    // bass on the off-beats once the page opens
+    if (c.t >= 2 && c.t < 12) for (let tt = c.t; tt < end - 0.01; tt += BEAT) bass(tt + BEAT / 2, c.root, BEAT * 0.42);
+    if (c.t >= 12) bass(c.t, c.root, end - c.t, 0.15);
+  });
+
+  // ---- drums: a kick on every beat ----
+  for (let b = 0; b < DUR / BEAT; b++) {
+    const t = b * BEAT;
+    kick(t, t < 2 ? 0.75 : t >= 12.5 ? 0.55 : 1);
+    if (t >= 2 && t < 12) {
+      hat(t + BEAT / 2, 0.11, b % 4 === 3);
+      if (t >= 6) hat(t + BEAT / 4, 0.05), hat(t + 3 * BEAT / 4, 0.05);
+      if (t >= 4 && b % 2 === 1 && t < 9.5) clap(t, 0.2);
+      if (t >= 10 && b % 2 === 1) clap(t, 0.24);
+    }
+  }
+
+  // ---- scene changes and UI sounds ----
+  SCENE_HITS.forEach(t => hit(t, 0.9));
+  hit(10.0, 1.15, true);
+  CLICKS.forEach(click);
+  pop(1.5, 0.3);                      // the "?" dot becomes the pill
+  whoosh(1.9, 0.4);                   // camera pulls out to the site
+  [3.5, 3.57, 3.64, 3.71].forEach(t => tick(t, 0.09));   // cards unfold
+  whoosh(3.92, 0.35, false, 0.16);    // pill flies to the price
+  [5.5, 5.6, 5.7, 5.8, 5.9].forEach(t => tick(t, 0.07));  // sold counter
+  whoosh(6.5, 0.45, false, 0.24);     // camera whip to the cart
+  riser(8.0, 10.0);
+  whoosh(9.45, 0.55, true, 0.2);      // pill swells to fill
+  pop(12.48, 0.32);                   // dot lands on the i
+
+  const buf = await ctx.startRendering();
+  // normalise to -1 dBFS and write 16-bit PCM WAV
+  const L = buf.getChannelData(0), Rr = buf.getChannelData(1);
+  let peak = 0; for (let i = 0; i < L.length; i++) peak = Math.max(peak, Math.abs(L[i]), Math.abs(Rr[i]));
+  const gain = 0.891 / (peak || 1);
+  const fade = SR * 0.4, n = L.length, bytes = new DataView(new ArrayBuffer(44 + n * 4));
+  const str = (o, s) => [...s].forEach((ch, i) => bytes.setUint8(o + i, ch.charCodeAt(0)));
+  str(0, 'RIFF'); bytes.setUint32(4, 36 + n * 4, true); str(8, 'WAVE'); str(12, 'fmt ');
+  bytes.setUint32(16, 16, true); bytes.setUint16(20, 1, true); bytes.setUint16(22, 2, true);
+  bytes.setUint32(24, SR, true); bytes.setUint32(28, SR * 4, true); bytes.setUint16(32, 4, true); bytes.setUint16(34, 16, true);
+  str(36, 'data'); bytes.setUint32(40, n * 4, true);
+  for (let i = 0; i < n; i++) {
+    const f = i > n - fade ? (n - i) / fade : 1;
+    bytes.setInt16(44 + i * 4, Math.round(clampS(L[i] * gain * f) * 32767), true);
+    bytes.setInt16(46 + i * 4, Math.round(clampS(Rr[i] * gain * f) * 32767), true);
+  }
+  const u8 = new Uint8Array(bytes.buffer); let bin = '';
+  for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return { b64: btoa(bin), peak };
+};
+function clampS(x) { return Math.max(-1, Math.min(1, x)); }
+</script></body></html>

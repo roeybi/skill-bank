@@ -1,0 +1,14 @@
+{
+  "name": "lilybar-reel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "15 s motion-graphics showreel for The Lily Bar's Signature Bouquets, rendered from HTML with Playwright",
+  "scripts": {
+    "beats": "node render.js beats scene.html --out work/beats",
+    "audio": "node render.js audio soundtrack.html --out work/music.wav",
+    "video": "node render.js video scene.html --out out/lilybar-signature-bouquets-15s.mp4 --audio work/music.wav --fps 60 --sub 3 --workers 3"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0"
+  }
+}

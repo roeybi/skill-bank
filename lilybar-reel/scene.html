@@ -1,0 +1,507 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>The Lily Bar showreel</title>
+<style>
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:100 900;font-display:block;
+  src:url("node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2") format("woff2-variations");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--bg:#F3ECE3;--paper:#FFFCF7;--ink:#2B2320;--muted:#8C8079;--line:rgba(43,35,32,.11);--tile:#EEE5DA;--accent:#A8244B;--cream:#FFF8F1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);overflow:hidden}
+body{font-family:"Fraunces",serif;font-variation-settings:"SOFT" 40,"WONK" 0;color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--bg)}
+#cam{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.abs{position:absolute;left:0;top:0}
+/* text masks: the outer span clips, the inner span moves */
+.m{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em .04em .3em;margin:-.14em -.04em -.3em}
+.i{display:inline-block}
+.bl{display:inline-block;width:0;height:0;vertical-align:baseline}
+
+/* ---------- the site, rebuilt as layers ---------- */
+#page{left:160px;top:70px;width:1600px;height:940px;background:var(--paper);border-radius:26px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(43,35,32,.05),0 40px 90px -50px rgba(43,35,32,.25);z-index:1}
+#hdr{height:92px;display:flex;align-items:center;justify-content:space-between;padding:0 56px;border-bottom:1px solid var(--line)}
+#siteName{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.icons{display:flex;gap:26px}
+#nav{height:64px;display:flex;align-items:center;justify-content:center;gap:40px;font-size:18px;font-weight:460;border-bottom:1px solid var(--line)}
+.ni{position:relative;white-space:nowrap}
+#navUnder{position:absolute;left:0;bottom:-9px;height:2px;width:0;background:var(--ink)}
+#colHead{padding:40px 86px 0}
+#colTitle{font-size:52px;font-weight:520;letter-spacing:-.015em;line-height:1.1}
+#grid{display:grid;grid-template-columns:repeat(4,330px);gap:36px;padding:30px 86px 0}
+.tile{height:380px;border-radius:16px;background:var(--tile);overflow:hidden}
+.tile svg{display:block}
+.name{font-size:23px;font-weight:580;margin-top:16px;line-height:1.2}
+.prow{display:flex;align-items:center;gap:16px;margin-top:8px;font-size:19px;height:30px;white-space:nowrap}
+.now{font-weight:640}
+.was{color:var(--muted);font-size:17px;position:relative}
+.strike{position:absolute;left:-2px;right:-2px;top:54%;height:1.5px;background:var(--muted);transform-origin:0 50%}
+.badge{font-size:14px;border:1.3px solid var(--ink);border-radius:999px;padding:2px 9px 3px;font-weight:560}
+.sold{margin-left:auto;color:var(--muted);font-size:15px}
+.btnslot{height:52px;margin-top:16px}
+#scrim{position:absolute;inset:0;background:var(--ink);opacity:0}
+#drawer{position:absolute;top:0;right:0;width:520px;height:100%;background:var(--paper);border-left:1px solid var(--line);padding:44px}
+#dTitle{font-size:30px;font-weight:540;line-height:1.2;margin-bottom:26px}
+#dItem{display:flex;gap:18px;align-items:center;margin-bottom:26px}
+#dItem .mini{width:84px;height:96px;border-radius:10px;background:var(--tile);overflow:hidden;flex:none}
+#dItem .t1{font-size:22px;font-weight:580}
+#dItem .t2{font-size:19px;font-weight:640;margin-top:4px}
+#dDiv{height:1px;background:var(--line);margin-bottom:26px;transform-origin:0 50%}
+#dDelivery{font-size:24px;font-weight:560;margin-bottom:12px;line-height:1.2}
+#dCut{font-size:19px;line-height:1.35;margin-bottom:10px}
+#dCut b{font-weight:680}
+#dWa{font-size:17px;line-height:1.4;color:var(--muted);margin-bottom:22px}
+#waSlot{height:58px;margin-bottom:16px}
+#dKV{font-size:16px;color:var(--muted);text-align:center}
+.blk{display:block;overflow:hidden;padding:.1em 0 .32em;margin:-.1em 0 -.32em}
+.blk>.i{display:block}
+
+/* ---------- hook, finale: authored in screen pixels, scaled into the world ---------- */
+#hook,#finale{width:1920px;height:1080px;transform-origin:0 0;z-index:2}
+#finale{z-index:4}
+.fl{position:absolute;left:0;width:1920px;text-align:center;white-space:nowrap;line-height:1}
+#hl1,#hl2{font-size:200px;font-weight:520;letter-spacing:-.025em}
+#hToday{color:var(--accent)}
+#fOrder{font-size:200px;font-weight:560;letter-spacing:-.025em;color:var(--cream)}
+#fDel{position:absolute;left:690px;top:330px;font-size:180px;font-weight:540;letter-spacing:-.025em;line-height:1.02}
+#fDel .ln{display:block}
+#fToday{color:var(--accent)}
+#fMark{font-size:190px;font-weight:560;letter-spacing:-.02em}
+#fCta{font-size:46px;font-weight:440;color:var(--muted)}
+#fUrl{font-size:40px;font-weight:620}
+
+/* ---------- the through-line object ---------- */
+#pill{background:var(--accent);overflow:hidden;z-index:3;transform-origin:50% 50%}
+.lab{position:absolute;left:50%;top:50%;white-space:nowrap;color:var(--cream);line-height:1.2}
+.lab>span{display:inline-block}
+.hand{position:absolute;left:0;top:0;background:var(--cream);transform-origin:50% 100%}
+#cursor{z-index:5;transform-origin:0 0}
+</style></head>
+<body><div id="stage">
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="fbPill" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB"><feGaussianBlur id="gbPill" stdDeviation="0 0"/></filter>
+  <filter id="fbCam" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB"><feGaussianBlur id="gbCam" stdDeviation="0 0"/></filter>
+</defs></svg>
+<div id="cam">
+
+  <div id="page" class="abs">
+    <div id="hdr">
+      <div id="siteName">The Lily Bar</div>
+      <div class="icons">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2320" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2320" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1-4.5 14-4.5 15 0"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2320" stroke-width="1.6" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+      </div>
+    </div>
+    <div id="nav"></div>
+    <div id="colHead"><div id="colTitle"><span class="m"><span class="i" id="colTitleI">Signature Bouquets</span></span></div></div>
+    <div id="grid"></div>
+    <div id="scrim"></div>
+    <div id="drawer">
+      <div id="dTitle" class="blk"><span class="i">Your cart</span></div>
+      <div id="dItemM" class="blk"><div class="i"><div id="dItem"><div class="mini" id="dMini"></div><div><div class="t1" id="dName"></div><div class="t2" id="dPrice"></div></div></div></div></div>
+      <div id="dDiv"></div>
+      <div id="dDelivery" class="blk"><span class="i">Delivery</span></div>
+      <div id="dCut" class="blk"><span class="i">Cut-off time for same-day delivery: <b id="d5pm">5PM</b></span></div>
+      <div id="dWa" class="blk"><span class="i">For same-day and next-day delivery, WhatsApp us directly.</span></div>
+      <div id="waSlot"></div>
+      <div id="dKV" class="blk"><span class="i">Delivering across the Klang Valley</span></div>
+    </div>
+  </div>
+
+  <div id="hook" class="abs">
+    <div class="fl" id="hl1" style="top:300px"><span class="m"><span class="i" id="hw0">Need</span></span> <span class="m"><span class="i" id="hw1">flowers</span></span></div>
+    <div class="fl" id="hl2" style="top:520px"><span class="m"><span class="i" id="hw2"><span id="hToday" style="display:inline-block">today</span><span id="hQ" style="display:inline-block">?</span><span class="bl" id="hBL"></span></span></span></div>
+  </div>
+
+  <div id="pill" class="abs">
+    <div class="lab" id="lab0" style="font-size:18px;font-weight:560"><span>Signature Bouquets</span></div>
+    <div class="lab" id="lab1" style="font-size:20px;font-weight:660"><span id="lab1t">RM 339</span></div>
+    <div class="lab" id="lab2" style="font-size:19px;font-weight:580"><span>Add to Cart</span></div>
+    <div class="lab" id="lab3" style="font-size:20px;font-weight:580"><span>WhatsApp us</span></div>
+    <div id="hMin" class="hand"></div><div id="hHour" class="hand"></div><div id="hCap" class="hand"></div>
+  </div>
+
+  <div id="finale" class="abs">
+    <div class="fl" id="fOrder" style="top:425px"><span class="m"><span class="i" id="fo0">Order by</span></span> <span class="m"><span class="i" id="fo1">5PM.</span></span></div>
+    <div id="fDel"><span class="ln"><span class="m"><span class="i" id="fd0">Delivered</span></span></span><span class="ln"><span class="m"><span class="i" id="fd1"><span id="fToday">today.</span></span></span></span></div>
+    <div class="fl" id="fMark" style="top:372px"><span class="m" id="fMarkM"><span id="fMarkI"></span><span class="bl" id="fBL"></span></span></div>
+    <div class="fl" id="fCta" style="top:640px"><span class="m"><span class="i" id="fc0">Order by 5PM for same-day delivery</span></span></div>
+    <div class="fl" id="fUrl" style="top:716px"><span class="m"><span class="i" id="fu0">thelilybar.co</span></span></div>
+  </div>
+
+  <div id="cursor" class="abs"><svg width="24" height="34" viewBox="0 0 24 34"><path d="M2 2v25l6.5-5.8 4.1 9.8 4.2-1.8-4-9.6H21z" fill="#1F1A17" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+<script>
+// ---- contract read by render.js ----
+window.W = 1920; window.H = 1080;
+window.BPM = 120; window.OFFSET = 0;
+window.DURATION = 15;
+
+// Real data from the shop's own listings (search-index snapshots of thelilybar.co).
+const NAV = ['New Collection', 'Signature Bouquets', 'Fresh Bouquets', 'Soap Bouquets', 'Blue Series', 'Bridal Bouquet', 'Sympathy Flowers'];
+const PRODUCTS = [
+  { name: 'Elora', now: 'RM 339', was: 'RM 349', off: '-3%', sold: 31 },
+  { name: 'Rubelle', now: 'RM 459', was: 'RM 468', off: '-2%', sold: 27 },
+  { name: 'Sylva', now: 'RM 259', was: 'RM 268', off: '-3%' },
+  { name: 'Cinderella', now: 'RM 179 – RM 429' },
+];
+const TILE = ['#EFE5DA', '#EBE4DC', '#EEE6D9', '#ECE3DF'];
+
+// ---- motion kit: every helper is a pure function of time ----
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ease = {
+  out: p => 1 - Math.pow(1 - p, 3),
+  in: p => p * p * p,
+  inOut: p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2,
+  expo: p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p),
+  quint: p => 1 - Math.pow(1 - p, 5),
+};
+function spring(t, f = 2.4, z = 0.85) {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f;
+  if (z >= 1) return 1 - Math.exp(-w * t) * (1 + w * t);
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+}
+// keys = [[time, value, freq, damping], ...]; first entry is the starting value. One spring per change, summed.
+function springsK(t, keys) {
+  let v = keys[0][1];
+  for (let i = 1; i < keys.length; i++) v += (keys[i][1] - keys[i - 1][1]) * spring(t - keys[i][0], keys[i][2] ?? 2.2, keys[i][3] ?? 0.85);
+  return v;
+}
+function rand(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const $ = id => document.getElementById(id);
+const gauss = (x, w) => Math.exp(-(x * x) / (2 * w * w));
+
+// text rising out of its mask; exits up (dir -1) or down (dir +1)
+function riseY(t, tin, tout = 1e9, dir = -1, f = 2.6, z = 0.9) {
+  if (t < tin) return 160;
+  let y = (1 - spring(t - tin, f, z)) * 160;
+  if (t > tout) y = lerp(y, dir * 160, ease.in(seg(t, tout, tout + 0.16)));
+  return y;
+}
+const setY = (el, y) => { el.style.transform = `translateY(${y}%)`; };
+
+// the camera pushes 4% per 2 s bar, forever, on top of every zoom
+const PUSH = Math.log(1.04) / 2;
+const push = t => Math.exp(PUSH * t);
+
+// ---- build static layers once (never inside seek) ----
+function bouquetSVG(seed, sw = 1.5) {
+  const r = rand(seed * 7919 + 13), j = a => (r() - .5) * 2 * a;
+  const cx = 165, mouth = 176;
+  let s = `<svg viewBox="0 0 330 380" width="100%" height="100%" fill="none" stroke="#2B2320" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">`;
+  s += `<path d="M${cx} 356 L${cx - 124} ${mouth - 8} Q${cx} ${mouth - 30} ${cx + 124} ${mouth - 8} Z" fill="#E6D9C9"/>`;
+  for (const [lx, ly, a] of [[-120, 6, -50], [120, 10, 48], [-76, -94, -24], [82, -98, 26], [-2, -124, 3]]) {
+    const x = cx + lx + j(4), y = mouth - 38 + ly + j(4), L = 46 + j(6);
+    s += `<path transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(a + j(8)).toFixed(1)})" d="M0 ${L * .5}Q${L * .34} 0 0 ${-L * .5}Q${-L * .34} 0 0 ${L * .5}ZM0 ${L * .42}L0 ${-L * .36}" fill="#DFE1D2"/>`;
+  }
+  const base = [[0, -76, 33], [-60, -54, 30], [62, -56, 31], [-98, -12, 27], [100, -10, 28], [-34, -16, 32], [34, -14, 33], [0, 20, 30], [-66, 28, 26], [68, 28, 27]];
+  const skip = new Set([Math.floor(r() * 10), Math.floor(r() * 10)]);
+  const blooms = base.filter((_, i) => !skip.has(i) || i < 3).map(([bx, by, br]) => [cx + bx + j(5), mouth - 36 + by + j(5), br + j(3)]).sort((a, b) => a[1] - b[1]);
+  for (const [x, y, R] of blooms) {
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${R.toFixed(1)}" fill="#FBF6F0"/>`;
+    s += `<path d="M${(x - R * .52).toFixed(1)} ${(y + R * .08).toFixed(1)}A${(R * .5).toFixed(1)} ${(R * .5).toFixed(1)} 0 1 1 ${(x + R * .34).toFixed(1)} ${(y + R * .4).toFixed(1)}"/>`;
+    s += `<path d="M${(x - R * .18).toFixed(1)} ${(y - R * .1).toFixed(1)}A${(R * .22).toFixed(1)} ${(R * .22).toFixed(1)} 0 1 0 ${(x + R * .2).toFixed(1)} ${(y + R * .02).toFixed(1)}"/>`;
+  }
+  s += `<path d="M${cx} 360 L${cx - 86} ${mouth + 24} Q${cx} ${mouth + 10} ${cx + 86} ${mouth + 24} Z" fill="#F4ECE2"/>`;
+  s += `<path d="M${cx - 86} ${mouth + 24} L${cx - 8} 356" stroke-opacity=".45"/>`;
+  const ry = 306;
+  s += `<path d="M${cx} ${ry}q-30-16-34 2q2 14 34-2Z" fill="#FBF6F0"/><path d="M${cx} ${ry}q30-16 34 2q-2 14-34-2Z" fill="#FBF6F0"/>`;
+  s += `<path d="M${cx - 3} ${ry + 3}l-12 24M${cx + 3} ${ry + 3}l12 24"/><circle cx="${cx}" cy="${ry}" r="5" fill="#FBF6F0"/>`;
+  return s + '</svg>';
+}
+
+$('nav').innerHTML = NAV.map((n, i) => `<span class="ni" id="ni${i}"><span class="m"><span class="i" id="nii${i}">${n}</span></span>${i === 1 ? '<i id="navUnder"></i>' : ''}</span>`).join('');
+$('grid').innerHTML = PRODUCTS.map((p, i) => `
+  <div class="card" id="card${i}">
+    <div class="tile" style="background:${TILE[i]}">${bouquetSVG(i + 1)}</div>
+    <div class="name">${p.name}</div>
+    <div class="prow" id="prow${i}">
+      <span class="now" id="now${i}">${p.now}</span>
+      ${p.was ? `<span class="m"><span class="i was" id="was${i}">${p.was}<i class="strike" id="strike${i}"></i></span></span>` : ''}
+      ${p.off ? `<span class="badge" id="badge${i}">${p.off}</span>` : ''}
+      ${p.sold ? `<span class="m sold"><span class="i" id="sold${i}">${p.sold} sold</span></span>` : ''}
+    </div>
+    ${i === 0 ? '<div class="btnslot" id="btnSlot"></div>' : ''}
+  </div>`).join('');
+$('dMini').innerHTML = bouquetSVG(1, 4);
+$('dName').textContent = PRODUCTS[0].name;
+$('dPrice').textContent = PRODUCTS[0].now;
+// wordmark letters: dotless i so the pill can become its dot
+$('fMarkI').innerHTML = [...'The Lıly Bar'].map((c, i) => `<span class="i" id="wm${i}">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+
+const camEl = $('cam'), page = $('page'), pill = $('pill'), cursor = $('cursor');
+let M = null, CAM = null, PK = null, CK = null;
+
+// ---- runtime measurement (after fonts load) ----
+function rectOf(el) { const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height, cx: b.left + b.width / 2, cy: b.top + b.height / 2, r: b.right, b: b.bottom }; }
+// a glyph's bottom blob (the dot of "?"), relative to its origin and baseline
+function glyphDot(ch, font) {
+  const S = 700, c = document.createElement('canvas'); c.width = c.height = S;
+  const g = c.getContext('2d'); g.font = font; g.fillText(ch, 100, 480);
+  const d = g.getImageData(0, 0, S, S).data, on = (x, y) => d[(y * S + x) * 4 + 3] > 110;
+  const row = y => { for (let x = 0; x < S; x++) if (on(x, y)) return true; return false; };
+  let y1 = S - 1; while (y1 > 0 && !row(y1)) y1--;
+  let y0 = y1; while (y0 > 0 && row(y0 - 1)) y0--;
+  let x0 = S, x1 = 0;
+  for (let y = y0; y <= y1; y++) for (let x = 0; x < S; x++) if (on(x, y)) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
+  return { cx: (x0 + x1 + 1) / 2 - 100, cy: (y0 + y1 + 1) / 2 - 480, d: Math.max(x1 - x0 + 1, y1 - y0 + 1) };
+}
+// the tittle: pixels of "i" that "ı" lacks
+function tittle(font) {
+  const S = 600, a = document.createElement('canvas'), b = document.createElement('canvas');
+  a.width = a.height = b.width = b.height = S;
+  const ga = a.getContext('2d'), gb = b.getContext('2d');
+  ga.font = gb.font = font; ga.fillText('i', 100, 420); gb.fillText('ı', 100, 420);
+  const da = ga.getImageData(0, 0, S, S).data, db = gb.getImageData(0, 0, S, S).data;
+  let x0 = S, x1 = 0, y0 = S, y1 = 0;
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const k = (y * S + x) * 4 + 3;
+    if (da[k] > 110 && db[k] < 20) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  }
+  return { cx: (x0 + x1 + 1) / 2 - 100, cy: (y0 + y1 + 1) / 2 - 420, d: Math.max(x1 - x0 + 1, y1 - y0 + 1) };
+}
+
+window.ready = document.fonts.load('520 200px Fraunces').then(() => document.fonts.ready).then(() => {
+  camEl.style.transform = 'none';
+  for (const id of ['hook', 'finale']) $(id).style.transform = 'none';
+  const R = {};
+  R.page = rectOf(page);
+  R.nav = NAV.map((_, i) => rectOf($('ni' + i)));
+  R.sig = R.nav[1];
+  R.card = PRODUCTS.map((_, i) => rectOf($('card' + i)));
+  R.prow0 = rectOf($('prow0'));
+  R.now0 = rectOf($('now0'));
+  R.btn = rectOf($('btnSlot'));
+  R.drawer = rectOf($('drawer'));
+  R.dTop = rectOf($('dTitle'));
+  R.dCut = rectOf($('dCut'));
+  R.wa = rectOf($('waSlot'));
+  R.dKV = rectOf($('dKV'));
+  // hook (container coords)
+  R.hToday = rectOf($('hToday')); R.hQ = rectOf($('hQ')); R.hBL = rectOf($('hBL'));
+  // finale (container coords)
+  R.fDel = rectOf($('fDel'));
+  R.wmI = rectOf($('wm5')); R.fBL = rectOf($('fBL'));
+  M = R;
+
+  // --- hook placement: "today?" sits exactly on the nav tab ---
+  const navPill = { cx: R.sig.cx, cy: R.sig.cy, w: R.sig.w + 44, h: 44 };
+  const hu = { x: R.hToday.x, r: R.hQ.r }; hu.w = hu.r - hu.x; hu.cx = (hu.x + hu.r) / 2;
+  const zh = clamp(hu.w / navPill.w, 2.1, 2.9);
+  const xhMid = R.hBL.y - 0.26 * 200;                 // middle of the x-height of the 200px hook type
+  const ox = navPill.cx - hu.cx / zh, oy = navPill.cy - xhMid / zh;
+  const hw = (x, y) => ({ x: ox + x / zh, y: oy + y / zh });
+  M.hook = { zh, ox, oy };
+  const qd = glyphDot('?', '520 200px Fraunces');
+  const dotC = hw(R.hQ.x + qd.cx, R.hBL.y + qd.cy);
+  const hookPill = { cx: hw(hu.cx, 0).x, cy: navPill.cy, w: hu.w / zh + 16, h: 0.6 * 200 / zh };
+  M.hookPill = hookPill;
+
+  // --- camera keys: [time, value, freq, damping]; zoom springs in log space ---
+  CAM = { x: [[0, ox + 960 / zh]], y: [[0, oy + 540 / zh]], lz: [[0, Math.log(zh)]] };
+  const key = (time, x, y, z, f = 1.4, d = 0.92) => {
+    CAM.x.push([time, x, f, d]); CAM.y.push([time, y, f, d]);
+    CAM.lz.push([time, Math.log(z / push(time + 0.45)), f, d]);
+  };
+  const navCx = (R.nav[0].x + R.nav[6].r) / 2;
+  const fitZ = (w, h, pw = 260, ph = 150) => Math.min(1920 / (w + pw), 1080 / (h + ph));
+  key(2.00, R.page.cx, R.sig.cy + 60, 1.27, 1.5, 0.92);
+  key(2.55, lerp(navCx, R.sig.cx, 0.55), R.sig.cy + 22, 1.78, 1.3, 0.92);
+  key(3.35, R.page.cx, R.page.cy + 6, 1.03, 1.4, 0.92);
+  key(4.00, R.card[0].cx, R.card[0].cy, fitZ(R.card[0].w, R.card[0].h), 1.5, 0.9);
+  key(4.85, R.prow0.cx, R.prow0.cy - 40, 2.55, 1.3, 0.92);
+  key(5.90, R.card[0].cx, (R.prow0.cy + R.btn.cy) / 2 - 20, 2.35, 1.5, 0.9);
+  const dBlock = { x: R.drawer.x, y: R.dTop.y - 30, r: R.drawer.r, b: R.dKV.b + 30 };
+  key(6.58, (dBlock.x + dBlock.r) / 2, (dBlock.y + dBlock.b) / 2, fitZ(dBlock.r - dBlock.x, dBlock.b - dBlock.y, 240, 140), 1.6, 0.9);
+  key(7.55, (dBlock.x + dBlock.r) / 2, (R.dCut.cy + R.wa.cy) / 2, 2.05, 1.3, 0.92);
+  key(8.45, R.wa.cx, (R.dCut.cy + R.wa.cy) / 2 + 18, 2.4, 1.3, 0.92);
+  key(8.95, R.wa.cx, R.wa.cy, 3.0, 1.4, 0.92);
+  key(9.45, R.wa.cx, R.wa.cy, 3.5, 1.6, 0.92);
+
+  // --- finale lives where the camera is at the payoff ---
+  const cf = cam(10.4), zf = cf.z;
+  const fl = cf.x - 960 / zf, ft = cf.y - 540 / zf;
+  const fw = (x, y) => ({ x: fl + x / zf, y: ft + y / zf });
+  M.fin = { zf, fl, ft };
+  const D = 300;
+  const discF = { cx: R.fDel.x - 80 - D / 2, cy: R.fDel.cy };
+  const disc = { ...fw(discF.cx, discF.cy), w: D / zf, h: D / zf };
+  const td = tittle('560 190px Fraunces');
+  const tt = fw(R.wmI.x + td.cx, R.fBL.y + td.cy);
+  const tit = { x: tt.x, y: tt.y, w: td.d / zf, h: td.d / zf };
+  const view = { w: 1920 / zf, h: 1080 / zf };
+  const fill = { x: cf.x, y: cf.y, w: view.w * 1.7, h: view.h * 1.9 };
+
+  // --- pill keys: centre, size, radius ---
+  PK = { x: [[0, dotC.x]], y: [[0, dotC.y]], w: [[0, qd.d / zh]], h: [[0, qd.d / zh]], r: [[0, qd.d / zh / 2]] };
+  const pk = (time, x, y, w, h, r, f = 2.2, d = 0.85) => {
+    for (const [k, v] of [['x', x], ['y', y], ['w', w], ['h', h], ['r', r]]) PK[k].push([time, v, f, d]);
+  };
+  pk(1.56, hookPill.cx, hookPill.cy, hookPill.w, hookPill.h, hookPill.h / 2, 2.4, 0.84);
+  pk(2.00, navPill.cx, navPill.cy, navPill.w, navPill.h, 22, 2.2, 0.86);
+  pk(4.00, R.now0.cx, R.now0.cy, R.now0.w + 24, 40, 20, 2.0, 0.86);
+  pk(6.00, R.btn.cx, R.btn.cy, R.btn.w, R.btn.h, 26, 2.4, 0.85);
+  pk(6.58, R.wa.cx, R.wa.cy, R.wa.w, R.wa.h, 29, 1.7, 0.88);
+  pk(9.45, R.wa.cx, R.wa.cy, R.wa.w * 1.18, R.wa.h * 1.5, 1e5, 2.2, 0.86);
+  pk(9.86, fill.x, fill.y, fill.w, fill.h, 1e5, 2.8, 1.0);
+  pk(10.95, disc.x, disc.y, disc.w, disc.h, 1e5, 2.6, 0.9);
+  pk(12.05, tit.x, tit.y, tit.w, tit.h, tit.w / 2, 1.9, 0.84);
+
+  // --- cursor keys (world) ---
+  CK = { x: [[0, R.sig.cx + 760]], y: [[0, R.sig.cy + 430]] };
+  const ck = (time, x, y, f = 1.5, d = 0.95) => { CK.x.push([time, x, f, d]); CK.y.push([time, y, f, d]); };
+  ck(2.42, R.sig.cx + 16, R.sig.cy + 10, 1.5);
+  ck(3.25, R.sig.cx + 90, R.sig.cy + 150, 1.2);
+  ck(4.05, R.card[0].x + R.card[0].w * 0.8, R.card[0].y + 300, 1.3);
+  ck(5.85, R.btn.cx + 40, R.btn.cy + 6, 1.8);
+  ck(6.62, R.wa.x + R.wa.w * 0.82, R.wa.cy + 74, 1.4);
+  ck(8.48, R.wa.cx + 46, R.wa.cy + 8, 1.8);
+
+  window.READY = true;
+  seek(0);
+});
+
+function cam(t) {
+  return { x: springsK(t, CAM.x), y: springsK(t, CAM.y), z: Math.exp(springsK(t, CAM.lz)) * push(t) };
+}
+function pillAt(t) {
+  return { x: springsK(t, PK.x), y: springsK(t, PK.y), w: Math.max(0, springsK(t, PK.w)), h: Math.max(0, springsK(t, PK.h)), r: Math.max(0, springsK(t, PK.r)) };
+}
+const toScreen = (x, y, c) => [(x - c.x) * c.z + 960, (y - c.y) * c.z + 540];
+
+const LABELS = [['lab0', 1.70, 3.98], ['lab1', 4.16, 5.98], ['lab2', 6.12, 6.56], ['lab3', 6.84, 9.40]];
+const CLICKS = [3.0, 6.5, 9.0];
+
+function seek(t) {
+  if (!M) return;
+  const ft = window.FRAME_T ?? t;
+
+  // ---------- camera ----------
+  const c = cam(t), c0 = cam(t - 1 / 240);
+  camEl.style.transform = `translate(960px,540px) scale(${c.z}) translate(${-c.x}px,${-c.y}px)`;
+  const cvx = (c.x - c0.x) * c.z * 240, cvy = (c.y - c0.y) * c.z * 240;
+  const camBlur = v => clamp((Math.abs(v) - 1400) / 260, 0, 14) / c.z;
+  const cbx = camBlur(cvx), cby = camBlur(cvy);
+  if (cbx + cby > 0.05) { $('gbCam').setAttribute('stdDeviation', `${cbx.toFixed(2)} ${cby.toFixed(2)}`); page.style.filter = 'url(#fbCam)'; }
+  else page.style.filter = 'none';
+
+  // ---------- hook ----------
+  const hk = M.hook;
+  $('hook').style.transform = `translate(${hk.ox}px,${hk.oy}px) scale(${1 / hk.zh})`;
+  $('hook').style.visibility = t < 2.4 ? 'visible' : 'hidden';
+  setY($('hw0'), riseY(t, -0.06, 1.9, -1));
+  setY($('hw1'), riseY(t, 0.5, 1.92, -1));
+  setY($('hw2'), riseY(t, 1.0));
+  // "?" erases from the top down to its dot, which is the pill
+  $('hQ').style.clipPath = `inset(${(t < 1.5 ? 0 : 100 * ease.out(seg(t, 1.5, 1.62)))}% 0 0 0)`;
+  $('hQ').style.visibility = t < 1.62 ? 'visible' : 'hidden';
+
+  // ---------- the pill ----------
+  const p = pillAt(t);
+  const pv = pillAt(t - 1 / 240);
+  const sq = 1 - CLICKS.reduce((a, tc) => a + 0.075 * gauss(t - tc - 0.05, 0.05), 0);
+  pill.style.visibility = t >= 1.5 ? 'visible' : 'hidden';
+  pill.style.width = p.w + 'px'; pill.style.height = p.h + 'px';
+  pill.style.borderRadius = Math.min(p.r, p.w / 2, p.h / 2) + 'px';
+  pill.style.transform = `translate(${p.x - p.w / 2}px,${p.y - p.h / 2}px) scale(${sq})`;
+  // "today" is swallowed by the pill's left edge
+  if (t >= 1.5) {
+    const leftC = (p.x - p.w / 2 - hk.ox) * hk.zh;           // pill left edge in hook coords
+    const cut = clamp((M.hToday.r - leftC) / M.hToday.w, 0, 1);
+    $('hToday').style.clipPath = `inset(-20% ${100 * (t >= 2.0 ? 1 : cut)}% -20% -5%)`;
+  } else $('hToday').style.clipPath = 'none';
+  // directional blur from screen-space speed
+  const [sx, sy] = toScreen(p.x, p.y, c), [sx0, sy0] = toScreen(pv.x, pv.y, c0);
+  const pb = v => clamp((Math.abs(v) - 900) / 240, 0, 16) / c.z;
+  const pbx = pb((sx - sx0) * 240), pby = pb((sy - sy0) * 240);
+  if (pbx + pby > 0.05 && t < 9.9) { $('gbPill').setAttribute('stdDeviation', `${pbx.toFixed(2)} ${pby.toFixed(2)}`); pill.style.filter = 'url(#fbPill)'; }
+  else pill.style.filter = 'none';
+  // labels inside the pill: each has its own in/out so they never overlap
+  for (const [id, tin, tout] of LABELS) {
+    const el = $(id), fs = parseFloat(el.style.fontSize), travel = p.h / 2 + fs * 0.6 + 4;
+    if (t < tin || t > tout + 0.15) { el.style.visibility = 'hidden'; continue; }
+    el.style.visibility = 'visible';
+    let off = (1 - spring(t - tin, 2.8, 0.9)) * travel;
+    if (t > tout) off = lerp(off, -travel, ease.in(seg(t, tout, tout + 0.14)));
+    el.style.transform = `translate(-50%,-50%) translateY(${off}px)`;
+  }
+  // clock hands, grown from the centre of the disc
+  const hv = t >= 11.2 && t < 12.2;
+  for (const id of ['hMin', 'hHour', 'hCap']) $(id).style.visibility = hv ? 'visible' : 'hidden';
+  if (hv) {
+    const g = spring(t - 11.24, 2.4, 0.86) * (1 - ease.in(seg(t, 12.0, 12.14)));
+    const w = Math.min(p.w, p.h), hw2 = (id, len, th, ang) => {
+      const e = $(id);
+      e.style.width = th + 'px'; e.style.height = len + 'px'; e.style.borderRadius = th / 2 + 'px';
+      e.style.transform = `translate(${p.w / 2 - th / 2}px,${p.h / 2 - len}px) rotate(${ang}deg) scaleY(${g})`;
+    };
+    hw2('hMin', w * 0.36, w * 0.042, 0);
+    hw2('hHour', w * 0.25, w * 0.054, 150 * spring(t - 11.55, 1.8, 0.84));
+    const cap = $('hCap'), cs = w * 0.1 * g;
+    cap.style.width = cap.style.height = cs + 'px'; cap.style.borderRadius = '50%';
+    cap.style.transform = `translate(${p.w / 2 - cs / 2}px,${p.h / 2 - cs / 2}px)`;
+  }
+
+  // ---------- page ----------
+  const pr = t < 2.0 ? 0 : 2300 * ease.expo(seg(t, 2.0, 2.8));
+  page.style.visibility = (t >= 2.0 && t < 10.3) ? 'visible' : 'hidden';
+  page.style.clipPath = `circle(${pr}px at ${M.sig.cx - M.page.x}px ${M.sig.cy - M.page.y}px)`;
+  NAV.forEach((_, i) => { if (i !== 1) setY($('nii' + i), riseY(t, 2.04 + 0.06 * Math.abs(i - 1))); });
+  $('navUnder').style.width = (M.sig.w * ease.out(seg(t, 4.06, 4.4))) + 'px';
+  setY($('colTitleI'), riseY(t, 3.42));
+  PRODUCTS.forEach((pd, i) => {
+    const t0 = 3.5 + 0.07 * i, e = $('card' + i);
+    const u = ease.quint(seg(t, t0, t0 + 0.5));
+    e.style.clipPath = `inset(0 0 ${100 * (1 - u)}% 0)`;
+    e.style.transform = `translateY(${(1 - spring(t - t0, 2.2, 0.88)) * 30}px)`;
+    if (i === 0) return;
+    // the other cards arrive complete
+  });
+  // Elora's price row is filled in beat by beat
+  $('now0').style.opacity = t >= 6.0 ? 1 : 0;
+  setY($('was0'), riseY(t, 4.5));
+  $('strike0').style.transform = `scaleX(${ease.out(seg(t, 4.62, 4.92))})`;
+  $('badge0').style.clipPath = `inset(-10% ${100 * (1 - ease.out(seg(t, 5.0, 5.3)))}% -10% -10%)`;
+  setY($('sold0'), riseY(t, 5.5));
+  $('sold0').textContent = Math.round(PRODUCTS[0].sold * ease.out(seg(ft, 5.5, 5.95))) + ' sold';
+  // cart drawer
+  $('scrim').style.opacity = 0.14 * ease.out(seg(t, 6.52, 6.9));
+  $('drawer').style.clipPath = `inset(0 0 0 ${100 * (1 - ease.expo(seg(t, 6.52, 6.98)))}%)`;
+  setY($('dTitle').firstElementChild, riseY(t, 6.74));
+  setY($('dItemM').firstElementChild, riseY(t, 7.0));
+  $('dDiv').style.transform = `scaleX(${ease.out(seg(t, 7.06, 7.45))})`;
+  setY($('dDelivery').firstElementChild, riseY(t, 7.5));
+  setY($('dCut').firstElementChild, riseY(t, 7.56));
+  setY($('dWa').firstElementChild, riseY(t, 8.0));
+  setY($('dKV').firstElementChild, riseY(t, 8.5));
+
+  // ---------- cursor ----------
+  const cv = t >= 2.4 && t < 9.5;
+  cursor.style.visibility = cv ? 'visible' : 'hidden';
+  if (cv) {
+    const x = springsK(t, CK.x), y = springsK(t, CK.y);
+    const press = 1 - CLICKS.reduce((a, tc) => a + 0.16 * gauss(t - tc - 0.04, 0.045), 0);
+    const leave = 1 - ease.in(seg(t, 9.28, 9.46));
+    cursor.style.transform = `translate(${x}px,${y}px) scale(${press * leave})`;
+  }
+
+  // ---------- finale ----------
+  const fn = M.fin;
+  $('finale').style.transform = `translate(${fn.fl}px,${fn.ft}px) scale(${1 / fn.zf})`;
+  $('finale').style.visibility = t >= 9.9 ? 'visible' : 'hidden';
+  setY($('fo0'), riseY(t, 10.04, 10.86, -1));
+  setY($('fo1'), riseY(t, 10.5, 10.86, -1));
+  setY($('fd0'), riseY(t, 11.2, 12.0, 1));
+  setY($('fd1'), riseY(t, 11.55, 12.0, 1));
+  [...'The Lıly Bar'].forEach((_, i) => setY($('wm' + i), riseY(t, 12.16 + 0.03 * i, 1e9, -1, 2.4, 0.9)));
+  setY($('fc0'), riseY(t, 13.0));
+  setY($('fu0'), riseY(t, 13.5));
+}
+window.seek = seek;
+</script></body></html>

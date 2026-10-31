@@ -13,10 +13,15 @@ calls, hooks, license); the notes below are what that review found.
 - Engine: `scripts/impeccable` is a shell launcher. On first use it downloads a
   Rust binary from the repo's GitHub releases into `~/.impeccable/bin/0.1.18/` and
   refuses to run it unless its SHA-256 matches `scripts/engine-checksums.txt`.
-- Telemetry: when starting a new design it fetches visual directions from
-  impeccable.style and, unless opted out, reports anonymously which direction was
-  picked. Opt out with `DO_NOT_TRACK=1` or `"telemetry": false` in
-  `.impeccable/config.json`.
+- Network: blocked for this repo. Upstream contacts impeccable.style for a daily
+  update check, for visual directions when a new design starts (plus an anonymous
+  record of the pick), and for direction preview images. `.claude/settings.json`
+  turns telemetry and the update check off and points all three addresses at
+  `127.0.0.1:9`, which accepts nothing. `.impeccable/config.json` repeats the
+  telemetry and update-check opt-outs for runs outside Claude Code. Without the
+  catalog, the skill picks directions from its own guidance ("degraded" seed).
+  Checked with strace: no connection leaves the machine. Don't run
+  `npx impeccable install` or `update`; they download from impeccable.style.
 - Not installed: the automatic design-detector hook (upstream `.claude/settings.json`).
   It runs on every Edit/Write and on Stop, outside permission prompts. Without it the
   skill asks for one detector run at the end of a task instead. Opt in per developer

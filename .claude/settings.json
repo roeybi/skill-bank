@@ -1,0 +1,10 @@
+{
+  "env": {
+    "DO_NOT_TRACK": "1",
+    "IMPECCABLE_NO_TELEMETRY": "1",
+    "IMPECCABLE_NO_UPDATE_CHECK": "1",
+    "IMPECCABLE_API_URL": "http://127.0.0.1:9/api",
+    "IMPECCABLE_CARD_BASE": "http://127.0.0.1:9/cards",
+    "IMPECCABLE_UPDATE_HOST": "http://127.0.0.1:9"
+  }
+}

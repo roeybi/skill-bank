@@ -1,0 +1,6 @@
+node_modules/
+beats/
+stills/
+*.wav
+part*.mp4
+render.log

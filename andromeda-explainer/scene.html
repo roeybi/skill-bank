@@ -1,0 +1,382 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Archivo";font-weight:800;src:url("node_modules/@fontsource/archivo/files/archivo-latin-800-normal.woff2") format("woff2")}
+@font-face{font-family:"Archivo";font-weight:900;src:url("node_modules/@fontsource/archivo/files/archivo-latin-900-normal.woff2") format("woff2")}
+@font-face{font-family:"Plex";font-weight:500;src:url("node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Plex";font-weight:600;src:url("node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2") format("woff2")}
+:root{--paper:#F1EBDF;--card:#FBF8F2;--ink:#151515;--yel:#FFD84A;--red:#E0402F;--mute:#BDB4A3}
+html,body{margin:0;background:var(--paper);overflow:hidden}
+#stage{position:relative;overflow:hidden;background:var(--paper);font-family:Inter,sans-serif;color:var(--ink)}
+#grain{position:absolute;inset:0;z-index:20;pointer-events:none;mix-blend-mode:multiply;opacity:.55;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .22 0'/></filter><rect width='400' height='400' filter='url(%23n)'/></svg>")}
+.abs{position:absolute;left:0;top:0}
+canvas{position:absolute;left:0;top:0;z-index:1}
+/* text blocks */
+.tx{position:absolute;isolation:isolate;z-index:12;line-height:1.08}
+.tx.h{font-family:Archivo;font-weight:900;letter-spacing:-.02em}
+.tx.b{font-family:Inter;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.tx.m{font-family:Plex;font-weight:600;letter-spacing:.06em}
+.wm{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .02em .14em;margin:0 -.02em -.14em}
+.w{display:inline-block}
+.mk{position:relative;display:inline}
+.bar{position:absolute;left:-.1em;right:-.1em;top:.2em;bottom:.02em;background:var(--yel);z-index:-1;transform-origin:0 50%}
+.ink .bar{background:var(--yel)}
+/* phone */
+#phone{width:400px;height:800px;box-sizing:border-box;border:12px solid var(--ink);border-radius:60px;background:var(--card);z-index:5;overflow:hidden}
+#phone .row{position:absolute;background:#D9D1C2;border-radius:8px}
+#slot{position:absolute;left:28px;top:200px;width:320px;height:360px;box-sizing:border-box;border:5px dashed var(--mute);border-radius:20px;
+  font-family:Archivo;font-weight:900;font-size:150px;color:var(--mute);display:flex;align-items:center;justify-content:center}
+#hero{width:300px;height:340px;box-sizing:border-box;border:5px solid var(--ink);border-radius:18px;background:var(--card);z-index:6;overflow:hidden}
+#hero .img{position:absolute;overflow:hidden;left:0;top:0;width:290px;height:196px;background:var(--yel);border-bottom:5px solid var(--ink)}
+#hero .sun{position:absolute;left:96px;top:40px;width:100px;height:100px;border-radius:50%;background:var(--red);border:5px solid var(--ink);box-sizing:border-box}
+#hero .hill{position:absolute;left:-20px;top:140px;width:340px;height:120px;border-radius:50%;background:#4A6FA5;border:5px solid var(--ink);box-sizing:border-box}
+#hero .l{position:absolute;left:20px;height:16px;background:var(--ink);border-radius:8px}
+#hero .cta{position:absolute;left:20px;top:278px;padding:7px 16px;background:var(--red);color:var(--card);font-family:Plex;font-weight:600;font-size:18px;border-radius:30px;letter-spacing:.06em}
+/* funnel boxes */
+.box{width:280px;height:200px;box-sizing:border-box;border:6px solid var(--ink);border-radius:20px;background:var(--card);z-index:7}
+.box .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.box .n{font-family:Plex;font-weight:600;font-size:26px;color:var(--red);letter-spacing:.08em}
+.box .t{font-family:Archivo;font-weight:900;font-size:40px;letter-spacing:-.01em}
+#box1{z-index:8}
+#slab{width:1640px;height:210px;box-sizing:border-box;border:6px solid var(--ink);border-radius:22px;background:var(--card);z-index:7}
+#ink{width:1920px;height:1080px;background:var(--ink);z-index:10}
+.strike{height:10px;background:var(--red);border-radius:5px;transform-origin:0 50%;z-index:13}
+.num{width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--card);font-family:Archivo;font-weight:900;font-size:36px;display:flex;align-items:center;justify-content:center;z-index:12}
+svg.draw{position:absolute;left:0;top:0;z-index:13;overflow:visible}
+#big{z-index:12;font-family:Archivo;font-weight:900;font-size:176px;letter-spacing:-.03em;color:var(--yel);font-variant-numeric:tabular-nums;white-space:nowrap}
+#bigwrap{overflow:hidden;z-index:12;padding-bottom:.1em}
+.stat{z-index:12;font-family:Archivo;font-weight:900;font-size:112px;letter-spacing:-.03em;white-space:nowrap;isolation:isolate;font-variant-numeric:tabular-nums}
+</style></head>
+<body><div id="stage">
+  <canvas id="field" width="1920" height="1080"></canvas>
+  <div id="phone" class="abs">
+    <div class="row" style="left:28px;top:40px;width:70px;height:12px"></div>
+    <div class="row" style="left:28px;top:96px;width:64px;height:64px;border-radius:50%"></div>
+    <div class="row" style="left:108px;top:104px;width:170px;height:18px"></div>
+    <div class="row" style="left:108px;top:134px;width:110px;height:14px"></div>
+    <div id="slot">?</div>
+    <div class="row" style="left:28px;top:590px;width:260px;height:18px"></div>
+    <div class="row" style="left:28px;top:624px;width:200px;height:18px"></div>
+    <div class="row" style="left:28px;top:700px;width:320px;height:6px"></div>
+  </div>
+  <div id="hero" class="abs">
+    <div class="img"><div class="sun"></div><div class="hill"></div></div>
+    <div class="l" style="top:216px;width:220px"></div>
+    <div class="l" style="top:244px;width:150px;background:#9A9182"></div>
+    <div class="cta">SHOP NOW</div>
+  </div>
+  <div id="slab" class="abs"></div>
+  <div id="box1" class="abs box"><div class="in"><div class="n">STEP 1</div><div class="t">Retrieval</div></div></div>
+  <div id="box2" class="abs box"><div class="in"><div class="n">STEP 2</div><div class="t">Ranking</div></div></div>
+  <div id="box3" class="abs box"><div class="in"><div class="n">STEP 3</div><div class="t">Auction</div></div></div>
+  <div id="ink" class="abs"></div>
+  <div id="bigwrap" class="abs"><div id="big">0</div></div>
+  <div id="strike" class="abs strike"></div>
+  <div id="n1" class="abs num">1</div><div id="n2" class="abs num">2</div><div id="n3" class="abs num">3</div>
+  <svg class="draw" width="1920" height="1080">
+    <path id="arrow1" d="M 1040 640 C 1110 690, 1150 600, 1172 560" fill="none" stroke="#E0402F" stroke-width="7" stroke-linecap="round"/>
+    <path id="arrow1h" d="M 1146 566 L 1174 556 L 1180 586" fill="none" stroke="#E0402F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="circ" d="M 620 432 C 760 425, 805 500, 798 565 C 790 650, 700 690, 615 688 C 520 686, 440 640, 442 560 C 444 480, 520 430, 650 436" fill="none" stroke="#E0402F" stroke-width="8" stroke-linecap="round"/>
+  </svg>
+  <div id="grain"></div>
+</div>
+<script>
+window.W = 1920; window.H = 1080;
+window.BPM = 120; window.OFFSET = 0;
+window.DURATION = 60;
+const stage = document.getElementById('stage');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+
+const B = 60 / BPM;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ease = {
+  out: p => 1 - Math.pow(1 - p, 3),
+  inOut: p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2,
+  expo: p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p),
+  inExpo: p => p <= 0 ? 0 : Math.pow(2, 10 * p - 10),
+};
+function spring(t, f = 2.4, z = 0.8) {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f;
+  if (z >= 1) return 1 - Math.exp(-w * t) * (1 + w * t);
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+}
+function springs(t, keys, f, z) {
+  let v = keys[0][1];
+  for (let i = 1; i < keys.length; i++) v += (keys[i][1] - keys[i - 1][1]) * spring(t - keys[i][0], f, z);
+  return v;
+}
+function tweens(t, keys, dur = 0.4, fn = ease.inOut) {
+  let v = keys[0][1];
+  for (let i = 1; i < keys.length; i++) v += (keys[i][1] - keys[i - 1][1]) * fn(seg(t, keys[i][0], keys[i][0] + dur));
+  return v;
+}
+function hash(n, s = 1) { let x = Math.sin(n * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); }
+const $ = id => document.getElementById(id);
+function put(el, x, y, s = 1, r = 0, o = 1) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) rotate(${r}deg) scale(${s})`;
+  el.style.opacity = o;
+  el.style.display = (o <= 0.001 || s <= 0.001) ? 'none' : 'block';
+}
+
+// ---------- kinetic text blocks ----------
+// cls: h (headline), b (body), m (mono label). anchor: tl | c | tc
+const TX = [];
+function T(text, o) {
+  const el = document.createElement('div');
+  el.className = 'tx ' + (o.cls || 'h') + (o.dark ? ' ink' : '');
+  el.style.fontSize = o.size + 'px';
+  el.style.color = o.color || 'var(--ink)';
+  if (o.w) el.style.width = o.w + 'px'; else el.style.whiteSpace = 'nowrap';
+  el.style.textAlign = o.align || 'left';
+  el.style.left = o.x + 'px'; el.style.top = o.y + 'px';
+  const tr = { tl: '', c: 'translate(-50%,-50%)', tc: 'translate(-50%,0)', cl: 'translate(0,-50%)' }[o.anchor || 'tl'];
+  el.style.transform = tr;
+  const words = [], marks = [];
+  text.split('_').forEach((part, k) => {
+    let host = el;
+    if (k % 2 === 1) {
+      host = document.createElement('span'); host.className = 'mk';
+      const bar = document.createElement('span'); bar.className = 'bar'; host.appendChild(bar);
+      marks.push(bar); el.appendChild(host);
+    }
+    part.split(/(\s+)/).forEach(tok => {
+      if (!tok) return;
+      if (/^\s+$/.test(tok)) { host.appendChild(document.createTextNode(' ')); return; }
+      const wm = document.createElement('span'); wm.className = 'wm';
+      const w = document.createElement('span'); w.className = 'w'; w.textContent = tok;
+      wm.appendChild(w); host.appendChild(wm); words.push(w);
+    });
+  });
+  stage.appendChild(el);
+  const rec = { el, words, marks, tin: o.tin, tout: o.tout, hl: o.hl ?? (o.tin + 0.35), stag: o.stag ?? 0.04 };
+  TX.push(rec); return rec;
+}
+function seekText(t) {
+  for (const r of TX) {
+    const vis = t >= r.tin - 0.01 && t <= r.tout + 0.8;
+    r.el.style.display = vis ? 'block' : 'none';
+    if (!vis) continue;
+    r.words.forEach((w, k) => {
+      const p = spring(t - r.tin - k * r.stag, 2.3, 0.9);
+      const q = ease.inOut(seg(t, r.tout + k * 0.015, r.tout + 0.32 + k * 0.015));
+      w.style.transform = `translateY(${((1 - p) * 115 - q * 115).toFixed(2)}%)`;
+    });
+    for (const b of r.marks) {
+      if (t < r.tout) { b.style.transformOrigin = '0 50%'; b.style.transform = `scaleX(${ease.out(seg(t, r.hl, r.hl + 0.4))})`; }
+      else { b.style.transformOrigin = '100% 50%'; b.style.transform = `scaleX(${1 - ease.inOut(seg(t, r.tout, r.tout + 0.25))})`; }
+    }
+  }
+}
+
+// ---------- script ----------
+// Scene A: hook (0-6)
+T('HOW META PICKS YOUR ADS', { cls: 'm', size: 30, color: 'var(--red)', x: 160, y: 250, tin: 0.3, tout: 5.6 });
+T('You open Instagram.', { size: 88, x: 160, y: 310, tin: 0.6, tout: 5.6 });
+T('In milliseconds, Meta has to choose _one ad_ for this slot.', { cls: 'b', size: 60, x: 160, y: 460, w: 860, tin: 2.0, tout: 5.6, hl: 3.0 });
+// Scene B: the pool (6-14)
+T('The candidates: _tens of millions_ of ads.', { size: 66, x: 960, y: 922, anchor: 'c', tin: 7.0, tout: 9.9, hl: 7.5 });
+T('And gen-AI tools have helped advertisers make _hundreds of millions_ more.', { cls: 'h', size: 56, x: 960, y: 922, w: 1500, align: 'center', anchor: 'c', tin: 10.4, tout: 13.7, hl: 11.2 });
+// Scene C: the funnel (14-26)
+T('So Meta runs a funnel.', { size: 84, x: 960, y: 150, anchor: 'c', tin: 15.2, tout: 23.6 });
+T('Andromeda is _step one_.', { size: 84, x: 960, y: 150, anchor: 'c', tin: 24.0, tout: 25.7, hl: 24.4 });
+T('Tens of millions in, a few thousand out', { cls: 'b', size: 30, x: 620, y: 712, w: 340, align: 'center', anchor: 'tc', tin: 16.5, tout: 25.6 });
+T('Bigger models score each one in detail', { cls: 'b', size: 30, x: 1020, y: 712, w: 340, align: 'center', anchor: 'tc', tin: 18.5, tout: 25.6 });
+T('One winner gets the slot', { cls: 'b', size: 30, x: 1420, y: 712, w: 300, align: 'center', anchor: 'tc', tin: 20.5, tout: 25.6 });
+T('THIS IS ANDROMEDA', { cls: 'm', size: 30, color: 'var(--red)', x: 620, y: 372, anchor: 'c', tin: 23.6, tout: 25.6 });
+// Scene D: what Andromeda is (26-36)
+T('ANDROMEDA · LAUNCHED DEC 2024', { cls: 'm', size: 30, color: 'var(--red)', x: 200, y: 170, tin: 26.6, tout: 35.5 });
+T('A deep-learning engine that finds the few thousand ads worth ranking, _for each person._', { size: 66, x: 200, y: 220, w: 1520, tin: 26.8, tout: 35.5, hl: 27.4, stag: 0.03 });
+T('more model capacity', { cls: 'b', size: 36, x: 420, y: 668, anchor: 'tc', tin: 28.2, tout: 35.5 });
+T('better recall', { cls: 'b', size: 36, x: 960, y: 668, anchor: 'tc', tin: 29.7, tout: 35.5 });
+T('better ad quality*', { cls: 'b', size: 36, x: 1500, y: 668, anchor: 'tc', tin: 31.2, tout: 35.5 });
+T('Runs on NVIDIA Grace Hopper chips and Meta\'s own MTIA accelerators.', { cls: 'b', size: 40, x: 960, y: 840, anchor: 'tc', tin: 32.9, tout: 35.5 });
+T('*ON SELECTED SEGMENTS', { cls: 'm', size: 22, color: '#6E6658', x: 1500, y: 722, anchor: 'tc', tin: 31.6, tout: 35.5 });
+// Scene E: the 2026 upgrade (36-44), on ink
+T('THE OCT 2026 UPGRADE', { cls: 'm', size: 32, color: 'var(--yel)', x: 960, y: 250, anchor: 'c', tin: 36.5, tout: 43.5 });
+T('ads scored per second', { cls: 'h', size: 64, color: 'var(--card)', x: 960, y: 600, anchor: 'c', tin: 37.3, tout: 43.5 });
+T('100x the throughput of the 2024 system', { cls: 'b', size: 44, color: 'var(--card)', x: 960, y: 760, anchor: 'c', tin: 39.4, tout: 43.5 });
+T('+2.4% conversions on Facebook since 2025', { cls: 'b', size: 44, color: 'var(--yel)', x: 960, y: 840, anchor: 'c', tin: 40.9, tout: 43.5 });
+// Scene F: so what (44-56)
+T('SO WHAT CHANGES FOR US?', { cls: 'm', size: 32, color: 'var(--red)', x: 300, y: 150, tin: 44.4, tout: 55.5 });
+T('OLD QUESTION', { cls: 'm', size: 26, color: '#6E6658', x: 300, y: 290, tin: 44.8, tout: 49.0 });
+const oldQ = T('Which audience should I target?', { size: 76, x: 300, y: 330, tin: 45.0, tout: 49.0 });
+T('NEW QUESTION', { cls: 'm', size: 26, color: '#6E6658', x: 300, y: 520, tin: 47.0, tout: 49.0 });
+T('Which ad fits _this person_?', { size: 76, x: 300, y: 560, tin: 47.2, tout: 49.0, hl: 47.8 });
+T('Go broad: fewer, bigger ad sets', { cls: 'h', size: 64, x: 400, y: 400, anchor: 'cl', tin: 49.5, tout: 55.5 });
+T('Feed it _genuinely different_ creative concepts', { cls: 'h', size: 64, x: 400, y: 560, anchor: 'cl', tin: 51.0, tout: 55.5, hl: 51.6 });
+T('Keep Pixel and Conversions API signals clean', { cls: 'h', size: 64, x: 400, y: 720, anchor: 'cl', tin: 52.5, tout: 55.5 });
+// Scene G: end card (56-60)
+T('Creative is the new _targeting._', { size: 120, x: 160, y: 300, w: 900, tin: 56.4, tout: 99, hl: 57.2 });
+T('SOURCES: META ENGINEERING BLOG, DEC 2024 + OCT 2026', { cls: 'm', size: 22, color: '#6E6658', x: 160, y: 980, tin: 57.2, tout: 99, stag: 0.02 });
+
+// stat counters (scene D)
+const stats = [];
+[['10,000', 'x', 420, 28.0, 10000], ['+6', '%', 960, 29.5, 6], ['+8', '%', 1500, 31.0, 8]].forEach(([label, suf, x, tin, val]) => {
+  const el = document.createElement('div'); el.className = 'abs stat';
+  const wrap = document.createElement('span'); wrap.className = 'mk';
+  const bar = document.createElement('span'); bar.className = 'bar'; wrap.appendChild(bar);
+  const txt = document.createElement('span'); wrap.appendChild(txt);
+  el.appendChild(wrap); stage.appendChild(el);
+  stats.push({ el, bar, txt, x, tin, val, suf, plus: label.startsWith('+') });
+});
+const fmt = n => n.toLocaleString('en-US');
+
+// ---------- canvas field: the ad pool and the funnel ----------
+const cv = $('field'), ctx = cv.getContext('2d');
+const PAL = ['#D94F3D', '#F2C14E', '#4A6FA5', '#5B8E7D', '#E8875B', '#2B2B2B', '#9C8FB8', '#C9BFAE'];
+const tiles = [];
+for (let i = -14; i <= 14; i++) for (let j = -8; j <= 8; j++) {
+  if (Math.abs(i) <= 1 && Math.abs(j) <= 2) continue;            // the phone sits here
+  const x = 960 + i * 72, y = 540 + j * 72;
+  if (x < -40 || x > 1960 || y < -40 || y > 1120) continue;
+  const d = Math.hypot(x - 960, y - 540);
+  tiles.push({ x, y, d, c: PAL[Math.floor(hash(i * 31 + j, 2) * PAL.length)] });
+}
+const dots = [];
+let heroIdx = -1;
+tiles.forEach((tl, ti) => {
+  for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+    const n = dots.length;
+    const c = (a === 0 && b === 0) ? tl.c : PAL[Math.floor(hash(n, 5) * PAL.length)];
+    const px = 110 + hash(n, 7) * 330, py = 560 + (hash(n, 8) - 0.5) * 2 * 210 * Math.sqrt(hash(n, 9) * 0.7 + 0.3);
+    const k1 = hash(n, 11) < 0.05, k2 = k1 && hash(n, 12) < 0.06;
+    dots.push({ tl, a, b, c, px, py, L: 15.7 + hash(n, 10) * 4.6, k1, k2 });
+  }
+});
+// pick the hero dot: one near the pool's centre, launched last
+heroIdx = 4; Object.assign(dots[heroIdx], { px: 270, py: 560, L: 19.4, k1: true, k2: true, c: '#F2C14E', hero: true });
+const V = 620, HERO_X = 1770;
+const heroArrive = dots[heroIdx].L + (HERO_X - 270) / V;
+
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, r); ctx.fill(); }
+
+function drawField(t) {
+  ctx.clearRect(0, 0, 1920, 1080);
+  if (t < 6 || t > 26.8) return;
+  for (let n = 0; n < dots.length; n++) {
+    const D = dots[n], tl = D.tl;
+    const pop = spring(t - (6.15 + tl.d / 1000 * 1.1), 2.6, 0.75);
+    if (pop <= 0.001) continue;
+    const sp = spring(t - (10.5 + tl.d / 1000 * 0.9), 2.3, 0.82);
+    // grid position: parent tile splits into 3x3 children
+    let x = tl.x + D.a * 24 * sp, y = tl.y + D.b * 24 * sp;
+    let s = lerp(60, 20, sp) * pop;
+    // collapse into the pool at the left
+    const e = ease.inOut(seg(t, 14.0 + tl.d / 1000 * 0.6, 15.2 + tl.d / 1000 * 0.6));
+    x = lerp(x, D.px, e); y = lerp(y, D.py, e); s = lerp(s, 11, e);
+    if (t > D.L) {
+      let fx = D.px + V * (t - D.L);
+      const stop = !D.k1 ? 620 : !D.k2 ? 1020 : D.hero ? HERO_X : 1420;
+      fx = Math.min(fx, stop);
+      const lane = 560 + (D.py - 560) * (fx > 1100 ? 0.12 : 0.32);
+      y = lerp(D.py, lane, ease.inOut(seg(fx, D.px, 480)));
+      if (fx > 760) y = lerp(y, 560 + (D.py - 560) * 0.12, ease.inOut(seg(fx, 760, 900)));
+      x = fx;
+      if (D.hero && t >= heroArrive) continue;
+    }
+    ctx.fillStyle = D.c;
+    if (sp < 0.02 && e === 0) {
+      rr(x, y, s, s, 10 * pop);
+      ctx.fillStyle = '#FBF8F2'; rr(x, y + s * 0.3, s * 0.82, s * 0.22, 4 * pop);
+    } else rr(x, y, s, s, lerp(5, 3, e));
+  }
+}
+
+// ---------- the piece ----------
+function seek(t) {
+  const ft = window.FRAME_T ?? t;
+  drawField(t);
+  seekText(t);
+
+  // phone: hook -> shrinks to centre tile -> pops away; returns for the end card
+  const phX = springs(t, [[0, 1380], [6.0, 960], [55.8, 1380]], 1.6, 0.85);
+  const phY = springs(t, [[0, 1700], [0.1, 540]], 1.8, 0.82);
+  let phS = springs(t, [[0, 1], [6.0, 0.3], [13.9, 0], [55.8, 1]], 1.7, 0.85);
+  put($('phone'), phX, phY, Math.max(0, phS));
+  $('slot').style.opacity = 1;
+  $('arrow1').style.strokeDasharray = 400; $('arrow1').style.strokeDashoffset = 400 * (1 - ease.out(seg(t, 3.0, 3.5))) + 400 * ease.inOut(seg(t, 5.5, 5.8));
+  $('arrow1h').style.strokeDasharray = 80; $('arrow1h').style.strokeDashoffset = 80 * (1 - ease.out(seg(t, 3.45, 3.65))) + 80 * seg(t, 5.5, 5.6) * 0 + (t > 5.75 ? 80 : 0);
+
+  // hero card: comes out of the auction, later flies into the phone slot
+  if (t < 30) {
+    const s = spring(t - heroArrive, 2.6, 0.75) * 0.55;
+    put($('hero'), HERO_X, 560, s, 0, t < 26.5 ? 1 : 0);
+  } else {
+    const p = spring(t - 56.4, 1.5, 0.86);
+    const sx = lerp(1700, phX, p), sy = lerp(1500, phY + 2, p);
+    put($('hero'), sx, sy, 1, lerp(-12, 0, p), t > 56.3 ? 1 : 0);
+  }
+
+  // bottom slab (scene B)
+  const slY = springs(t, [[0, 1250], [6.7, 922], [13.8, 1250]], 2.0, 0.85);
+  put($('slab'), 960, slY, 1, 0, (t > 6.5 && t < 14.6) ? 1 : 0);
+
+  // funnel boxes; box 1 grows into the Andromeda panel
+  const bx = [[620, 14.6], [1020, 15.0], [1420, 15.4]];
+  ['box2', 'box3'].forEach((id, k) => {
+    const [x, tin] = bx[k + 1];
+    const s = spring(t - tin, 2.6, 0.75);
+    const y = 560 + 900 * ease.inExpo(seg(t, 25.7 + k * 0.08, 26.2 + k * 0.08));
+    put($(id), x, y, s, 0, t < 26.6 ? 1 : 0);
+  });
+  {
+    const b1 = $('box1');
+    const s = spring(t - bx[0][1], 2.6, 0.75);
+    const g = spring(t - 26.0, 1.6, 0.86), back = ease.inExpo(seg(t, 35.9, 36.3));
+    const w = lerp(280, 1760, g), h = lerp(200, 980, g);
+    b1.style.width = w + 'px'; b1.style.height = h + 'px';
+    put(b1, lerp(620, 960, g), lerp(560, 540, g), s, 0, t < 36.6 ? 1 : 0);
+    b1.firstChild.style.opacity = 1 - seg(t, 25.95, 26.1);
+    b1.style.background = t > 26 ? mixHex('#FBF8F2', '#FBF8F2', 0) : '';
+  }
+  // red circle around retrieval
+  const circ = $('circ'); circ.style.strokeDasharray = 1100;
+  circ.style.strokeDashoffset = 1100 * (1 - ease.out(seg(t, 23.4, 24.0))) + 1100 * ease.inOut(seg(t, 25.6, 25.9));
+  circ.style.display = (t > 23.3 && t < 26) ? 'block' : 'none';
+
+  // stat counters (scene D)
+  stats.forEach((S, k) => {
+    const p = spring(t - S.tin, 2.4, 0.8);
+    const out = ease.inExpo(seg(t, 35.5 + k * 0.05, 35.85 + k * 0.05));
+    const v = Math.round(S.val * ease.out(seg(ft, S.tin, S.tin + 0.9)));
+    S.txt.textContent = (S.plus ? '+' : '') + fmt(v) + S.suf;
+    S.bar.style.transform = `scaleX(${ease.out(seg(t, S.tin + 0.6, S.tin + 1.0)) * (1 - out)})`;
+    put(S.el, S.x, 590 + (1 - p) * 60 - out * 40, lerp(0.85, 1, p), 0, (t >= S.tin && t < 35.9) ? clamp(p * 3) * (1 - out) : 0);
+  });
+
+  // ink panel (scene E)
+  const inkY = springs(t, [[0, 1620], [36.0, 540], [44.0, -560]], 1.5, 0.92);
+  put($('ink'), 960, inkY, 1, 0, (t > 35.9 && t < 45.5) ? 1 : 0);
+  {
+    const p = spring(t - 36.8, 2.2, 0.9), q = ease.inOut(seg(t, 43.5, 43.85));
+    $('big').style.transform = `translateY(${(1 - p) * 110 - q * 110}%)`;
+    const v = Math.round(1e9 * ease.out(seg(ft, 36.8, 38.4)));
+    $('big').textContent = fmt(v) + (ft >= 38.4 ? '+' : '');
+    put($('bigwrap'), 960, 430, 1, 0, (t > 36.7 && t < 44) ? 1 : 0);
+  }
+
+  // old question strike-through
+  {
+    const st = $('strike');
+    const w = oldQ.el.offsetWidth || 1100;
+    st.style.width = w + 'px';
+    const p = ease.out(seg(t, 46.2, 46.6)), q = ease.inOut(seg(t, 49.0, 49.3));
+    st.style.transform = `translate(300px, 377px) scaleX(${p * (1 - q)})`;
+    st.style.display = (t > 46.2 && t < 49.4) ? 'block' : 'none';
+  }
+  // checklist numbers
+  [['n1', 400, 49.5], ['n2', 560, 51.0], ['n3', 720, 52.5]].forEach(([id, y, tin]) => {
+    const p = spring(t - tin, 2.6, 0.75), q = ease.inExpo(seg(t, 55.5, 55.8));
+    put($(id), 330, y, p * (1 - q), lerp(-30, 0, p), t >= tin && t < 55.85 ? 1 : 0);
+  });
+}
+function mixHex(a) { return a; }
+window.seek = seek;
+window.ready = document.fonts.ready;
+seek(0);
+</script></body></html>
